@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animals - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Pinterest-style theme */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+    }
+
+    body {
+      background-color: var(--background-color);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .page-header {
+      text-align: center;
+      padding: 40px 0 20px;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 15px;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    /* Filter Controls */
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding: 0 20px;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--secondary-text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+    }
+
+    .search-container {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 30px;
+      position: relative;
+    }
+
+    .search-container input {
+      width: 100%;
+      padding: 12px 20px;
+      padding-left: 45px;
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(230, 0, 35, 0.2);
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    /* Masonry Layout */
+    .masonry-grid {
+      column-count: 4;
+      column-gap: 20px;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .masonry-grid {
+        column-count: 3;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .masonry-grid {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .masonry-grid {
+        column-count: 1;
+      }
+    }
+
+    .animal-card {
+      break-inside: avoid;
+      margin-bottom: 20px;
+      border-radius: 16px;
+      overflow: hidden;
+      background-color: var(--card-background);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .animal-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .animal-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .animal-card-content {
+      padding: 15px;
+    }
+
+    .animal-card-content h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: var(--secondary-text);
+    }
+
+    .animal-card-content p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .animal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .animal-tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .tag-dog {
+      background-color: var(--pastel-1);
+      color: #e67e22;
+    }
+
+    .tag-cat {
+      background-color: var(--pastel-2);
+      color: #e74c3c;
+    }
+
+    .tag-vaccinated {
+      background-color: var(--pastel-3);
+      color: #27ae60;
+    }
+
+    .tag-adoption {
+      background-color: var(--pastel-4);
+      color: #2980b9;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background-color: var(--card-background);
+      margin: 50px auto;
+      max-width: 800px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: modalFadeIn 0.3s;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 24px;
+      color: var(--secondary-text);
+    }
+
+    .close-modal {
+      font-size: 24px;
+      color: #999;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: var(--accent-color);
+    }
+
+    .modal-body {
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .modal-image {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .modal-image img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .modal-details {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .detail-group {
+      margin-bottom: 15px;
+    }
+
+    .detail-group h3 {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .detail-group p {
+      font-size: 18px;
+      color: var(--secondary-text);
+    }
+
+    .modal-actions {
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+    }
+
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .adopt-btn {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+    }
+
+    .adopt-btn:hover {
+      background-color: #d10021;
+      transform: translateY(-2px);
+    }
+
+    .contact-btn {
+      background-color: transparent;
+      color: var(--accent-color);
+      border: 2px solid var(--accent-color);
+    }
+
+    .contact-btn:hover {
+      background-color: rgba(230, 0, 35, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Loading indicator */
+    .loading {
+      text-align: center;
+      padding: 40px 0;
+      display: none;
+    }
+
+    .loading i {
+      font-size: 40px;
+      color: var(--accent-color);
+      animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <h1>PawPatrol</h1>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="animals.html" class="active">Animals</a></li>
+        <li><a href="adoption.html">Adoption</a></li>
+        <li><a href="feeding.html">Feeding</a></li>
+        <li><a href="lostfound.html">Lost & Found</a></li>
+        <li><a href="rescue.html">Rescue</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a href="auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
+        <a href="auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
+        <a href="#" id="logoutBtn" class="btn auth-btn login-btn" style="display: none;">Logout</a>
+      </div>
+      <div class="burger">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h1>Our Animals</h1>
+      <p>Browse through our database of street animals that need your help. You can filter by type, status, or search for specific animals.</p>
+    </section>
+
+    <section class="filter-section">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search animals...">
+      </div>
+      
+      <div class="filter-controls">
+        <button class="filter-btn active" data-filter="all">All Animals</button>
+        <button class="filter-btn" data-filter="dog">Dogs</button>
+        <button class="filter-btn" data-filter="cat">Cats</button>
+        <button class="filter-btn" data-filter="adoption">For Adoption</button>
+        <button class="filter-btn" data-filter="vaccinated">Vaccinated</button>
+        <button class="filter-btn" data-filter="rescue">Recently Rescued</button>
+      </div>
+    </section>
+
+    <section class="animals-grid-section">
+      <div class="masonry-grid" id="animalsGrid">
+        <!-- Animal cards will be dynamically added here -->
+      </div>
+      
+      <div class="loading" id="loadingIndicator">
+        <i class="fas fa-spinner"></i>
+        <p>Loading more animals...</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Animal Detail Modal -->
+  <div class="modal" id="animalModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Animal Details</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="modal-image">
+          <img id="modalImage" src="" alt="Animal">
+        </div>
+        <div class="modal-details">
+          <div class="detail-group">
+            <h3>Type</h3>
+            <p id="modalType">Dog</p>
+          </div>
+          <div class="detail-group">
+            <h3>Age</h3>
+            <p id="modalAge">Approximately 2 years</p>
+          </div>
+          <div class="detail-group">
+            <h3>Gender</h3>
+            <p id="modalGender">Male</p>
+          </div>
+          <div class="detail-group">
+            <h3>Location Found</h3>
+            <p id="modalLocation">Main Street Park</p>
+          </div>
+          <div class="detail-group">
+            <h3>Health Status</h3>
+            <p id="modalHealth">Vaccinated, Healthy</p>
+          </div>
+          <div class="detail-group">
+            <h3>Description</h3>
+            <p id="modalDescription">Friendly and playful dog found in the park. Good with children and other animals.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn contact-btn">Contact Caretaker</button>
+        <button class="modal-btn adopt-btn">Request Adoption</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h2>PetCare</h2>
+          <p>Helping street animals since 2023</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="animals.html">Animals</a></li>
+            <li><a href="adoption.html">Adoption</a></li>
+            <li><a href="feeding.html">Feeding</a></li>
+            <li><a href="lostfound.html">Lost & Found</a></li>
+            <li><a href="rescue.html">Rescue</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i> info@petcare.org</p>
+          <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 PetCare. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sample animal data (in a real app, this would come from a database)
+      const animals = [
+        {
+          id: 1,
+          name: 'Max',
+          type: 'dog',
+          breed: 'Mixed Breed',
+          age: 'Approximately 2 years',
+          gender: 'Male',
+          location: 'Central Park Area',
+          health: 'Vaccinated, Healthy',
+          description: 'Friendly and playful dog found in the park. Good with children and other animals.',
+          tags: ['dog', 'vaccinated', 'adoption'],
+          image: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 2,
+          name: 'Luna',
+          type: 'cat',
+          breed: 'Domestic Shorthair',
+          age: 'Approximately 1 year',
+          gender: 'Female',
+          location: 'Downtown Area',
+          health: 'Vaccinated, Spayed',
+          description: 'Gentle and affectionate cat found near a restaurant. Very clean and well-behaved.',
+          tags: ['cat', 'vaccinated', 'adoption'],
+          image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 3,
+          name: 'Rocky',
+          type: 'dog',
+          breed: 'Labrador Mix',
+          age: 'Approximately 3 years',
+          gender: 'Male',
+          location: 'Riverside Park',
+          health: 'Under treatment, Not vaccinated yet',
+          description: 'Energetic and loyal dog rescued from the riverside. Needs some medical attention but recovering well.',
+          tags: ['dog', 'rescue'],
+          image: 'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 4,
+          name: 'Bella',
+          type: 'cat',
+          breed: 'Calico',
+          age: 'Approximately 2 years',
+          gender: 'Female',
+          location: 'Residential Area',
+          health: 'Vaccinated, Healthy',
+          description: 'Beautiful calico cat found in a residential area. Very friendly and loves to be petted.',
+          tags: ['cat', 'vaccinated', 'adoption'],
+          image: 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 5,
+          name: 'Charlie',
+          type: 'dog',
+          breed: 'Beagle Mix',
+          age: 'Approximately 1 year',
+          gender: 'Male',
+          location: 'Shopping District',
+          health: 'Vaccinated, Healthy',
+          description: 'Playful and curious beagle mix found near a shopping center. Very social with people and other dogs.',
+          tags: ['dog', 'vaccinated', 'adoption'],
+          image: 'https://images.unsplash.com/photo-1551717743-49959800b1f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 6,
+          name: 'Milo',
+          type: 'cat',
+          breed: 'Tabby',
+          age: 'Approximately 6 months',
+          gender: 'Male',
+          location: 'School Area',
+          health: 'Vaccinated, Healthy',
+          description: 'Young tabby kitten found near a school. Very playful and energetic.',
+          tags: ['cat', 'vaccinated', 'adoption'],
+          image: 'https://images.unsplash.com/photo-1574144113084-b6f450cc5e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 7,
+          name: 'Daisy',
+          type: 'dog',
+          breed: 'Terrier Mix',
+          age: 'Approximately 4 years',
+          gender: 'Female',
+          location: 'Industrial Area',
+          health: 'Under treatment, Not vaccinated yet',
+          description: 'Sweet terrier mix rescued from an industrial area. Currently receiving medical treatment for minor injuries.',
+          tags: ['dog', 'rescue'],
+          image: 'https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+          id: 8,
+          name: 'Oliver',
+          type: 'cat',
+          breed: 'Siamese Mix',
+          age: 'Approximately 3 years',
+          gender: 'Male',
+          location: 'Apartment Complex',
+          health: 'Vaccinated, Healthy',
+          description: 'Elegant Siamese mix found in an apartment complex. Very vocal and affectionate.',
+          tags: ['cat', 'vaccinated', 'adoption'],
+          image: 'https://images.unsplash.com/photo-1555685812-4b8f286e7f30?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        }
+      ];
+
+      const animalsGrid = document.getElementById('animalsGrid');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const searchInput = document.getElementById('searchInput');
+      const modal = document.getElementById('animalModal');
+      const closeModal = document.querySelector('.close-modal');
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      
+      let currentFilter = 'all';
+      let currentSearch = '';
+      let page = 1;
+      const itemsPerPage = 4; // Load 4 items at a time for infinite scroll
+
+      // Initialize the grid with the first set of animals
+      loadAnimals();
+
+      // Filter button click handlers
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Update filter and reset page
+          currentFilter = this.dataset.filter;
+          page = 1;
+          
+          // Clear grid and load filtered animals
+          animalsGrid.innerHTML = '';
+          loadAnimals();
+        });
+      });
+
+      // Search input handler
+      searchInput.addEventListener('input', function() {
+        currentSearch = this.value.toLowerCase();
+        page = 1;
+        animalsGrid.innerHTML = '';
+        loadAnimals();
+      });
+
+      // Modal close handler
+      closeModal.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+      // Close modal when clicking outside of it
+      window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      // Infinite scroll implementation
+      window.addEventListener('scroll', function() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+          loadMoreAnimals();
+        }
+      });
+
+      function loadAnimals() {
+        // Filter and search animals
+        let filteredAnimals = animals.filter(animal => {
+          // Apply tag filter
+          const passesFilter = currentFilter === 'all' || animal.tags.includes(currentFilter);
+          
+          // Apply search filter
+          const passesSearch = currentSearch === '' || 
+                              animal.name.toLowerCase().includes(currentSearch) || 
+                              animal.type.toLowerCase().includes(currentSearch) || 
+                              animal.breed.toLowerCase().includes(currentSearch) || 
+                              animal.description.toLowerCase().includes(currentSearch);
+          
+          return passesFilter && passesSearch;
+        });
+
+        // Get the current page of animals
+        const startIndex = 0;
+        const endIndex = page * itemsPerPage;
+        const currentPageAnimals = filteredAnimals.slice(startIndex, endIndex);
+
+        // Render the animals
+        renderAnimals(currentPageAnimals);
+
+        // Hide loading indicator if no more animals to load
+        if (endIndex >= filteredAnimals.length) {
+          loadingIndicator.style.display = 'none';
+        } else {
+          loadingIndicator.style.display = 'block';
+        }
+      }
+
+      function loadMoreAnimals() {
+        // Increment page and load more animals
+        page++;
+        loadAnimals();
+      }
+
+      function renderAnimals(animalsToRender) {
+        animalsToRender.forEach(animal => {
+          const card = document.createElement('div');
+          card.className = 'animal-card';
+          card.dataset.id = animal.id;
+          
+          // Create tags HTML
+          let tagsHTML = '';
+          animal.tags.forEach(tag => {
+            tagsHTML += `<span class="animal-tag tag-${tag}">${tag}</span>`;
+          });
+          
+          card.innerHTML = `
+            <img src="${animal.image}" alt="${animal.name}">
+            <div class="animal-card-content">
+              <h3>${animal.name}</h3>
+              <p>${animal.breed} · ${animal.gender}</p>
+              <p>${animal.location}</p>
+              <div class="animal-tags">
+                ${tagsHTML}
+              </div>
+            </div>
+          `;
+          
+          // Add click event to open modal
+          card.addEventListener('click', function() {
+            openAnimalModal(animal);
+          });
+          
+          animalsGrid.appendChild(card);
+        });
+      }
+
+      function openAnimalModal(animal) {
+        // Populate modal with animal details
+        document.getElementById('modalTitle').textContent = animal.name;
+        document.getElementById('modalImage').src = animal.image;
+        document.getElementById('modalImage').alt = animal.name;
+        document.getElementById('modalType').textContent = `${animal.type} (${animal.breed})`;
+        document.getElementById('modalAge').textContent = animal.age;
+        document.getElementById('modalGender').textContent = animal.gender;
+        document.getElementById('modalLocation').textContent = animal.location;
+        document.getElementById('modalHealth').textContent = animal.health;
+        document.getElementById('modalDescription').textContent = animal.description;
+        
+        // Show modal
+        modal.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

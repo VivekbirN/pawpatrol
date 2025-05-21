@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Pinterest-style theme */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+    }
+
+    body {
+      background-color: var(--background-color);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .about-section {
+      padding: 80px 0;
+      background-color: var(--pastel-1);
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .about-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .about-header h1 {
+      font-size: 3rem;
+      color: var(--secondary-text);
+      margin-bottom: 20px;
+    }
+
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .about-image {
+      flex: 1;
+      min-width: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .about-text h2 {
+      font-size: 2.2rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      color: var(--secondary-text);
+    }
+
+    .mission-section {
+      padding: 80px 0;
+      background-color: var(--pastel-4);
+    }
+
+    .mission-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .mission-container h2 {
+      font-size: 2.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 30px;
+    }
+
+    .mission-container p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      color: var(--secondary-text);
+    }
+
+    @media (max-width: 768px) {
+      .about-content {
+        flex-direction: column;
+      }
+      
+      .about-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .about-text h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <h1>PawPatrol</h1>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="animals.html">Animals</a></li>
+        <li><a href="adoption.html">Adoption</a></li>
+        <li><a href="feeding.html">Feeding</a></li>
+        <li><a href="lostfound.html">Lost & Found</a></li>
+        <li><a href="rescue.html">Rescue</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a href="new_auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
+        <a href="new_auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
+        <a href="#" id="logoutBtn" class="btn auth-btn login-btn" style="display: none;">Logout</a>
+      </div>
+      <div class="hamburger">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="about-section">
+      <div class="about-container">
+        <div class="about-header">
+          <h1>About Us</h1>
+        </div>
+        <div class="about-content">
+          <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pets">
+          </div>
+          <div class="about-text">
+            <h2>Vivekbir Narula</h2>
+            <p>Welcome to PawPatrol, where compassion meets action. I'm Vivekbir Narula, the founder of this initiative dedicated to improving the lives of street dogs and cats in our community.</p>
+            <p>With over 5 years of experience in animal welfare, I've witnessed firsthand the challenges faced by stray animals and the impact that dedicated care can have on their lives. My journey began when I rescued my first stray puppy, and since then, I've been committed to creating sustainable solutions for animal welfare.</p>
+            <p>At PawPatrol, we believe that every animal deserves love, care, and respect. Our team works tirelessly to rescue, rehabilitate, and rehome street animals while also focusing on community education and preventive measures.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mission-section">
+      <div class="mission-container">
+        <h2>Our Mission</h2>
+        <p>To create a compassionate community where no street animal suffers from neglect, hunger, or abuse. We strive to implement sustainable solutions through rescue operations, feeding programs, medical care, adoption services, and community education.</p>
+        <p>Join us in our mission to make a difference in the lives of these voiceless creatures. Together, we can create a world where every paw has a safe path to follow.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="nav-container">
+      <p>&copy; 2023 PawPatrol. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      
+      hamburger?.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
