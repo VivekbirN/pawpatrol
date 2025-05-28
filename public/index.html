@@ -20,66 +20,145 @@
       --pastel-3: #C8E4B2;
       --pastel-4: #9ED2C6;
     }
+  
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       background-color: var(--background-color);
       font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+  
+    /* Background Image Carousel */
+    .background-carousel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    .background-carousel .carousel-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      animation: fadeImage 18s infinite;
+    }
+
+    .background-carousel .carousel-image:nth-child(1) { animation-delay: 0s; }
+    .background-carousel .carousel-image:nth-child(2) { animation-delay: 6s; }
+    .background-carousel .carousel-image:nth-child(3) { animation-delay: 12s; }
+
+    @keyframes fadeImage {
+      0%   { opacity: 0; }
+      15%  { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Light overlay for better text readability over carousel */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: -1;
     }
 
     .hero {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
       height: 90vh;
+      position: relative;
     }
-
+    
+    .hero-content {
+      text-align: center;
+      color: var(--secondary-text);
+      padding: 0 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+  
     .hero-content h1 {
       font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 25px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      color: var(--secondary-text);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
     }
-
+  
     .hero-content p {
       font-size: 1.4rem;
       margin-bottom: 40px;
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      color: var(--secondary-text);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     }
-
+  
     .hero-buttons {
       gap: 25px;
     }
-
+  
     .hero-buttons .btn {
       padding: 15px 30px;
       font-size: 18px;
       font-weight: 600;
       border-radius: 30px;
       transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
     }
-
+  
     .hero-buttons .primary-btn {
       background-color: var(--accent-color);
       box-shadow: 0 4px 15px rgba(230, 0, 35, 0.3);
+      color: white;
+      border: 1px solid var(--accent-color);
     }
-
+  
     .hero-buttons .primary-btn:hover {
-      background-color: #d10021;
       transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(230, 0, 35, 0.4);
     }
-
+  
     .hero-buttons .secondary-btn {
       background-color: transparent;
-      border: 2px solid white;
-      color: white;
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
     }
-
+  
     .hero-buttons .secondary-btn:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(230, 0, 35, 0.1);
       transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(230, 0, 35, 0.2);
     }
-
+  
     .feature-card {
       background-color: var(--card-background);
       border-radius: 16px;
@@ -87,83 +166,125 @@
       transition: all 0.3s ease;
       overflow: hidden;
     }
-
+  
     .feature-card:hover {
       transform: translateY(-10px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     }
-
+  
     .feature-card i {
       color: var(--accent-color);
       font-size: 2.5rem;
       margin-bottom: 15px;
     }
-
+  
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 25px;
       margin-top: 40px;
     }
-
+  
+    .nav-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .navbar {
+      padding: 15px 0;
+      background-color: var(--card-background);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+    }
+    
+    .nav-links a {
+      color: var(--secondary-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent-color);
+    }
+  
     .auth-buttons {
       display: flex;
       gap: 15px;
       align-items: center;
+      margin-left: auto;
     }
-
-    .auth-btn {
-      padding: 8px 20px;
+  
+    .login-btn, .register-btn {
+      padding: 6px 16px;
       border-radius: 30px;
-      font-weight: 600;
+      font-weight: 500;
+      text-decoration: none;
       transition: all 0.3s ease;
-    }
-
-    .login-btn {
-      color: var(--accent-color);
-      border: 2px solid var(--accent-color);
-      background-color: transparent;
-    }
-
-    .login-btn:hover {
-      background-color: rgba(230, 0, 35, 0.1);
-    }
-
-    .register-btn {
-      background-color: var(--accent-color);
-      color: white;
-    }
-
-    .register-btn:hover {
-      background-color: #d10021;
+      font-size: 14px;
+      display: inline-block;
     }
     
+    .login-btn {
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      background-color: white;
+    }
+    
+    .register-btn {
+      color: white;
+      background-color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+    }
+    
+    .login-btn:hover, .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  
     /* CTA Section */
     .cta-section {
       background-color: var(--pastel-3);
       padding: 80px 0;
       margin-top: 60px;
     }
-    
+  
     .cta-content {
       text-align: center;
       max-width: 800px;
       margin: 0 auto;
       padding: 0 20px;
     }
-    
+  
     .cta-content h2 {
       font-size: 2.5rem;
       margin-bottom: 20px;
       color: var(--secondary-text);
     }
-    
+  
     .cta-content p {
       font-size: 1.2rem;
       margin-bottom: 30px;
       color: var(--secondary-text);
     }
-    
+  
     .cta-content .primary-btn {
       background-color: var(--accent-color);
       padding: 15px 30px;
@@ -171,34 +292,38 @@
       font-weight: 600;
       border-radius: 30px;
       box-shadow: 0 4px 15px rgba(230, 0, 35, 0.3);
+      color: white;
+      border: 1px solid var(--accent-color);
+      text-decoration: none;
+      display: inline-block;
     }
-    
+  
     .cta-content .primary-btn:hover {
-      background-color: #d10021;
       transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(230, 0, 35, 0.4);
     }
   </style>
+  
 </head>
 <body>
   <header>
     <nav class="navbar">
-      <div class="logo">
-        <h1>PawPatrol</h1>
-      </div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="animals.html">Animals</a></li>
-        <li><a href="adoption.html">Adoption</a></li>
-        <li><a href="feeding.html">Feeding</a></li>
-        <li><a href="lostfound.html">Lost & Found</a></li>
-        <li><a href="rescue.html">Rescue</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-      <div class="auth-buttons">
-        <a href="new_auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
-        <a href="new_auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
-        <a href="#" id="logoutBtn" class="btn auth-btn login-btn" style="display: none;">Logout</a>
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="feeding.html">Feeding</a></li>
+          <li><a href="lostfound.html">Lost & Found</a></li>
+          <li><a href="rescue.html">Rescue</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+        <a href="new_auth.html" id="loginBtn" class="login-btn">Login</a>
+        <a href="new_auth.html?mode=register" id="registerBtn" class="register-btn">Register</a>
+        <a href="#" id="logoutBtn" class="login-btn" style="display: none;">Logout</a>
       </div>
       <div class="burger">
         <div class="line1"></div>
@@ -207,6 +332,13 @@
       </div>
     </nav>
   </header>
+
+  <!-- Background Image Carousel -->
+  <div class="background-carousel">
+    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+  </div>
 
   <main>
     <section class="hero">
@@ -227,6 +359,10 @@
           <div class="about-text">
             <p>Our Street Dogs and Cats Management System helps NGOs, municipalities, and animal lovers to effectively track, care for, and manage stray animals. We provide tools for animal registration, health tracking, feeding schedules, adoption management, lost & found reporting, and rescue coordination.</p>
             <p>Join us in making a difference in the lives of street animals!</p>
+            <div class="founder-image">
+              <img src="../viv.png" alt="Vivekbir Narula" style="max-width: 200px; border-radius: 10px; margin-top: 20px;">
+              <p><em>Vivekbir Narula, Founder</em></p>
+            </div>
           </div>
           <div class="about-stats">
             <div class="stat-box">
@@ -299,41 +435,31 @@
   </main>
 
   <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <h2>PawPatrol</h2>
-          <p>Helping street animals since 2023</p>
-        </div>
-        <div class="footer-links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="animals.html">Animals</a></li>
-            <li><a href="adoption.html">Adoption</a></li>
-            <li><a href="feeding.html">Feeding</a></li>
-            <li><a href="lostfound.html">Lost & Found</a></li>
-            <li><a href="rescue.html">Rescue</a></li>
-          </ul>
-        </div>
-        <div class="footer-contact">
-          <h3>Contact Us</h3>
-          <p><i class="fas fa-envelope"></i> info@PawPatrol.org</p>
-          <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
-          <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2023 PawPatrol. All rights reserved.</p>
-      </div>
+    <div class="nav-container">
+      <p>&copy; 2023 PawPatrol. All rights reserved.</p>
     </div>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
+  <script>
+    // Check if user is already logged in and redirect to appropriate dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('petcare_token');
+      const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
+      
+      if (token && currentUser) {
+        // Redirect based on user role
+        if (currentUser.role === 'admin') {
+          window.location.href = 'admin_dashboard.html';
+        } else if (currentUser.role === 'vet') {
+          window.location.href = 'vet_dashboard.html';
+        } else {
+          window.location.href = 'user_dashboard.html';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

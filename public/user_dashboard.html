@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Dashboard specific styles */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+      --user-color: #e60023;
+    }
+
+    .dashboard-container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: var(--card-background);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px 0;
+      position: fixed;
+      height: calc(100vh - 70px);
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-header h3 {
+      color: var(--user-color);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: var(--secondary-text);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .sidebar-menu a:hover, .sidebar-menu a.active {
+      background-color: rgba(230, 0, 35, 0.1);
+      color: var(--user-color);
+      border-left: 4px solid var(--user-color);
+    }
+
+    .sidebar-menu a i {
+      margin-right: 10px;
+      font-size: 1.1rem;
+    }
+
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      padding: 30px;
+    }
+
+    .dashboard-header {
+      margin-bottom: 30px;
+    }
+
+    .dashboard-header h2 {
+      font-size: 1.8rem;
+      color: var(--secondary-text);
+      margin-bottom: 10px;
+    }
+
+    .dashboard-header p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .action-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--secondary-text);
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+      border-color: var(--user-color);
+      color: var(--user-color);
+    }
+
+    .action-button i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    .featured-animals {
+      margin-bottom: 30px;
+    }
+
+    .featured-animals h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--secondary-text);
+    }
+
+    .animals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .animal-card {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .animal-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .animal-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .animal-details {
+      padding: 15px;
+    }
+
+    .animal-details h4 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      color: var(--secondary-text);
+    }
+
+    .animal-details p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .animal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .animal-tag {
+      padding: 3px 8px;
+      background-color: rgba(230, 0, 35, 0.1);
+      color: var(--user-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    .animal-actions {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .animal-actions a {
+      padding: 5px 10px;
+      background-color: var(--user-color);
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .animal-actions a:hover {
+      opacity: 0.9;
+    }
+
+    .nearby-feedings {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    .nearby-feedings h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--secondary-text);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .feeding-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .feeding-item:last-child {
+      border-bottom: none;
+    }
+
+    .feeding-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(230, 0, 35, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+
+    .feeding-icon i {
+      font-size: 1.2rem;
+      color: var(--user-color);
+    }
+
+    .feeding-details {
+      flex: 1;
+    }
+
+    .feeding-details h4 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: var(--secondary-text);
+    }
+
+    .feeding-details p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .feeding-time {
+      font-weight: 600;
+      color: var(--user-color);
+    }
+
+    .community-activity {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .community-activity h3 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: var(--secondary-text);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-user {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      overflow: hidden;
+    }
+
+    .activity-user img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-content h4 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: var(--secondary-text);
+    }
+
+    .activity-content p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .activity-time {
+      color: #999;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px 0;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .animals-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="user_dashboard.html" class="active">Dashboard</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <a href="#" id="logoutBtn" class="login-btn">Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>User Dashboard</h3>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="user_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="animals.html"><i class="fas fa-paw"></i> Animals</a></li>
+        <li><a href="#"><i class="fas fa-heart"></i> Favorites</a></li>
+        <li><a href="#"><i class="fas fa-home"></i> Adoption</a></li>
+        <li><a href="#"><i class="fas fa-search"></i> Lost & Found</a></li>
+        <li><a href="#"><i class="fas fa-ambulance"></i> Report Rescue</a></li>
+        <li><a href="#"><i class="fas fa-user"></i> My Profile</a></li>
+        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <h2>Welcome, <span id="userName">Pet Lover</span></h2>
+        <p>Thank you for helping street animals in your community!</p>
+      </div>
+
+      <div class="action-buttons">
+        <a href="#" class="action-button"><i class="fas fa-home"></i> Adopt a Pet</a>
+        <a href="#" class="action-button"><i class="fas fa-search"></i> Report Lost/Found</a>
+        <a href="#" class="action-button"><i class="fas fa-ambulance"></i> Request Rescue</a>
+        <a href="#" class="action-button"><i class="fas fa-hand-holding-heart"></i> Volunteer</a>
+      </div>
+
+      <div class="featured-animals">
+        <h3>Animals Looking for Forever Homes</h3>
+        <div class="animals-grid">
+          <div class="animal-card">
+            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Dog" class="animal-image">
+            <div class="animal-details">
+              <h4>Max</h4>
+              <p>Male, 2 years old</p>
+              <div class="animal-tags">
+                <span class="animal-tag">Friendly</span>
+                <span class="animal-tag">Vaccinated</span>
+                <span class="animal-tag">Neutered</span>
+              </div>
+              <div class="animal-actions">
+                <a href="#">View Details</a>
+                <a href="#">Adopt</a>
+              </div>
+            </div>
+          </div>
+          <div class="animal-card">
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cat" class="animal-image">
+            <div class="animal-details">
+              <h4>Luna</h4>
+              <p>Female, 1 year old</p>
+              <div class="animal-tags">
+                <span class="animal-tag">Playful</span>
+                <span class="animal-tag">Vaccinated</span>
+                <span class="animal-tag">Spayed</span>
+              </div>
+              <div class="animal-actions">
+                <a href="#">View Details</a>
+                <a href="#">Adopt</a>
+              </div>
+            </div>
+          </div>
+          <div class="animal-card">
+            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Dog" class="animal-image">
+            <div class="animal-details">
+              <h4>Rocky</h4>
+              <p>Male, 3 years old</p>
+              <div class="animal-tags">
+                <span class="animal-tag">Loyal</span>
+                <span class="animal-tag">Vaccinated</span>
+                <span class="animal-tag">Trained</span>
+              </div>
+              <div class="animal-actions">
+                <a href="#">View Details</a>
+                <a href="#">Adopt</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nearby-feedings">
+        <h3>Nearby Feeding Stations</h3>
+        <div class="feeding-item">
+          <div class="feeding-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="feeding-details">
+            <h4>Central Park Feeding Station</h4>
+            <p>Next feeding: <span class="feeding-time">Today, 5:00 PM</span></p>
+            <p>2 volunteers needed</p>
+          </div>
+          <a href="#" class="action-button">Volunteer</a>
+        </div>
+        <div class="feeding-item">
+          <div class="feeding-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="feeding-details">
+            <h4>Market Street Feeding Station</h4>
+            <p>Next feeding: <span class="feeding-time">Tomorrow, 8:00 AM</span></p>
+            <p>1 volunteer needed</p>
+          </div>
+          <a href="#" class="action-button">Volunteer</a>
+        </div>
+        <div class="feeding-item">
+          <div class="feeding-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="feeding-details">
+            <h4>Riverside Feeding Station</h4>
+            <p>Next feeding: <span class="feeding-time">Tomorrow, 6:30 PM</span></p>
+            <p>3 volunteers needed</p>
+          </div>
+          <a href="#" class="action-button">Volunteer</a>
+        </div>
+      </div>
+
+      <div class="community-activity">
+        <h3>Community Activity</h3>
+        <div class="activity-item">
+          <div class="activity-user">
+            <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="User">
+          </div>
+          <div class="activity-content">
+            <h4>Sarah J. adopted a cat</h4>
+            <p>Sarah adopted Luna, a 1-year-old female cat</p>
+            <span class="activity-time">2 hours ago</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-user">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+          </div>
+          <div class="activity-content">
+            <h4>Michael T. reported a lost dog</h4>
+            <p>Brown Labrador, male, last seen near Central Park</p>
+            <span class="activity-time">Yesterday</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-user">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User">
+          </div>
+          <div class="activity-content">
+            <h4>Emma L. volunteered for feeding</h4>
+            <p>Volunteered at Riverside Feeding Station</p>
+            <span class="activity-time">2 days ago</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
+      
+      if (!currentUser) {
+        // Redirect to login page if not logged in
+        window.location.href = 'new_auth.html';
+      } else {
+        // Display user name
+        document.getElementById('userName').textContent = currentUser.name;
+      }
+    });
+  </script>
+</body>
+</html>

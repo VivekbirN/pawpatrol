@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Animals - PawPatrol</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -21,9 +20,56 @@
       --pastel-4: #9ED2C6;
     }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: var(--background-color);
       font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Image Carousel */
+    .background-carousel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    .background-carousel .carousel-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .background-carousel .carousel-image.active {
+      opacity: 0.6;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: -1;
     }
 
     .page-header {
@@ -346,24 +392,117 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+
+    /* Features Section Styles */
+    .features-section {
+      padding: 60px 0;
+      background-color: rgba(255, 255, 255, 0.9);
+      margin-top: 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 40px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .feature-icon i {
+      font-size: 30px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .feature-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .feature-btn:hover {
+      background-color: #d10021;
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
+  <!-- Background Carousel -->
+  <div class="background-carousel">
+    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="carousel-image active" alt="Dog">
+    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="carousel-image" alt="Cat">
+    <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="carousel-image" alt="Dog">
+    <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" class="carousel-image" alt="Cat">
+  </div>
+  <div class="overlay"></div>
+
   <header>
     <nav class="navbar">
-      <div class="logo">
-        <h1>PawPatrol</h1>
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="animals.html" class="active">Animals</a></li>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="feeding.html">Feeding</a></li>
+          <li><a href="lostfound.html">Lost & Found</a></li>
+          <li><a href="rescue.html">Rescue</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
       </div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="animals.html" class="active">Animals</a></li>
-        <li><a href="adoption.html">Adoption</a></li>
-        <li><a href="feeding.html">Feeding</a></li>
-        <li><a href="lostfound.html">Lost & Found</a></li>
-        <li><a href="rescue.html">Rescue</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
       <div class="auth-buttons">
         <a href="auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
         <a href="auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
@@ -410,6 +549,68 @@
       </div>
     </section>
   </main>
+
+  <!-- Our Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">Our Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <h3>Animal Registration</h3>
+          <p>Register stray animals with photos, location, and health information</p>
+          <a href="registration.html" class="feature-btn">Register Animal</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <h3>Health Tracking</h3>
+          <p>Monitor vaccinations and medical treatments</p>
+          <a href="health.html" class="feature-btn">Track Health</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <h3>Feeding Schedule</h3>
+          <p>Organize feeding points and volunteer schedules</p>
+          <a href="feeding.html" class="feature-btn">View Schedule</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-home"></i>
+          </div>
+          <h3>Adoption Portal</h3>
+          <p>Help animals find forever homes</p>
+          <a href="adoption.html" class="feature-btn">Adopt Now</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>Lost & Found</h3>
+          <p>Report and search for lost or found animals</p>
+          <a href="lostfound.html" class="feature-btn">Report</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-ambulance"></i>
+          </div>
+          <h3>Rescue Requests</h3>
+          <p>Request help for animals in need</p>
+          <a href="rescue.html" class="feature-btn">Request Rescue</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Animal Detail Modal -->
   <div class="modal" id="animalModal">
@@ -494,6 +695,27 @@
   <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
   <script>
+    // Background Carousel Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const carouselImages = document.querySelectorAll('.carousel-image');
+      let currentImageIndex = 0;
+      
+      function rotateCarouselImages() {
+        // Hide all images
+        carouselImages.forEach(img => img.classList.remove('active'));
+        
+        // Show next image
+        currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
+        carouselImages[currentImageIndex].classList.add('active');
+      }
+      
+      // Set initial image
+      carouselImages[0].classList.add('active');
+      
+      // Rotate images every 5 seconds
+      setInterval(rotateCarouselImages, 5000);
+    });
+    
     document.addEventListener('DOMContentLoaded', function() {
       // Sample animal data (in a real app, this would come from a database)
       const animals = [

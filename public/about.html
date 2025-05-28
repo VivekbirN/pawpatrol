@@ -21,31 +21,123 @@
       --pastel-4: #9ED2C6;
     }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: var(--background-color);
       font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
     }
 
-    .about-section {
-      padding: 80px 0;
-      background-color: var(--pastel-1);
+    /* Background Image */
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      z-index: -2;
+      opacity: 0.8;
     }
 
-    .about-container {
+    /* Light overlay for better text readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: -1;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .nav-container {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .navbar {
+      padding: 15px 0;
+      background-color: var(--card-background);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+    }
+    
+    .nav-links a {
+      color: var(--secondary-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent-color);
+    }
+    
+    footer {
+      background-color: var(--card-background);
+      padding: 15px 0;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-container {
+      width: 850px;
+      max-width: 95%;
+      background: var(--card-background);
+      border-radius: 20px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      margin: 10px auto;
+      border: 1px solid var(--border-color);
+      padding: 40px;
     }
 
     .about-header {
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 30px;
     }
 
     .about-header h1 {
-      font-size: 3rem;
-      color: var(--secondary-text);
-      margin-bottom: 20px;
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 15px;
     }
 
     .about-content {
@@ -58,7 +150,7 @@
     .about-image {
       flex: 1;
       min-width: 300px;
-      border-radius: 16px;
+      border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
@@ -75,42 +167,47 @@
     }
 
     .about-text h2 {
-      font-size: 2.2rem;
-      color: var(--accent-color);
-      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: var(--secondary-text);
+      margin-bottom: 15px;
     }
 
     .about-text p {
       font-size: 1.1rem;
-      line-height: 1.8;
-      margin-bottom: 20px;
-      color: var(--secondary-text);
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 15px;
     }
 
-    .mission-section {
-      padding: 80px 0;
-      background-color: var(--pastel-4);
+    .team-section {
+      margin-top: 50px;
     }
 
-    .mission-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
+    .team-section h2 {
       text-align: center;
-    }
-
-    .mission-container h2 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: var(--secondary-text);
       margin-bottom: 30px;
     }
 
-    .mission-container p {
-      font-size: 1.2rem;
-      line-height: 1.8;
-      max-width: 800px;
-      margin: 0 auto 30px;
+    .team-member {
+      background-color: var(--pastel-1);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .team-member h3 {
+      font-size: 1.5rem;
       color: var(--secondary-text);
+      margin-bottom: 10px;
+    }
+
+    .team-member p {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #555;
     }
 
     @media (max-width: 768px) {
@@ -118,72 +215,68 @@
         flex-direction: column;
       }
       
-      .about-header h1 {
-        font-size: 2.5rem;
-      }
-      
-      .about-text h2 {
-        font-size: 1.8rem;
+      .about-image, .about-text {
+        min-width: 100%;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Background Image -->
+  <div class="background-image"></div>
+
+  <!-- Navigation -->
   <header>
     <nav class="navbar">
-      <div class="logo">
-        <h1>PawPatrol</h1>
-      </div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="animals.html">Animals</a></li>
-        <li><a href="adoption.html">Adoption</a></li>
-        <li><a href="feeding.html">Feeding</a></li>
-        <li><a href="lostfound.html">Lost & Found</a></li>
-        <li><a href="rescue.html">Rescue</a></li>
-        <li><a href="about.html" class="active">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-      <div class="auth-buttons">
-        <a href="new_auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
-        <a href="new_auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
-        <a href="#" id="logoutBtn" class="btn auth-btn login-btn" style="display: none;">Logout</a>
-      </div>
-      <div class="hamburger">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="feeding.html">Feeding</a></li>
+          <li><a href="lostfound.html">Lost & Found</a></li>
+          <li><a href="rescue.html">Rescue</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
       </div>
     </nav>
   </header>
 
+  <!-- About Content -->
   <main>
-    <section class="about-section">
-      <div class="about-container">
-        <div class="about-header">
-          <h1>About Us</h1>
+    <div class="about-container">
+      <div class="about-header">
+        <h1>About PawPatrol</h1>
+      </div>
+      
+      <div class="about-content">
+        <div class="about-image">
+          <img src="https://images.unsplash.com/photo-1535930891776-0c2dfb7fda1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pet Care">
         </div>
-        <div class="about-content">
-          <div class="about-image">
-            <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pets">
-          </div>
-          <div class="about-text">
-            <h2>Vivekbir Narula</h2>
-            <p>Welcome to PawPatrol, where compassion meets action. I'm Vivekbir Narula, the founder of this initiative dedicated to improving the lives of street dogs and cats in our community.</p>
-            <p>With over 5 years of experience in animal welfare, I've witnessed firsthand the challenges faced by stray animals and the impact that dedicated care can have on their lives. My journey began when I rescued my first stray puppy, and since then, I've been committed to creating sustainable solutions for animal welfare.</p>
-            <p>At PawPatrol, we believe that every animal deserves love, care, and respect. Our team works tirelessly to rescue, rehabilitate, and rehome street animals while also focusing on community education and preventive measures.</p>
-          </div>
+        
+        <div class="about-text">
+          <h2>Our Mission</h2>
+          <p>At PawPatrol, we are dedicated to improving the lives of street animals through rescue, rehabilitation, and rehoming efforts. Our mission is to create a world where every animal has a safe and loving home.</p>
+          <p>We work tirelessly to provide medical care, food, and shelter to animals in need, while also educating the community about responsible pet ownership and the importance of animal welfare.</p>
         </div>
       </div>
-    </section>
-
-    <section class="mission-section">
-      <div class="mission-container">
-        <h2>Our Mission</h2>
-        <p>To create a compassionate community where no street animal suffers from neglect, hunger, or abuse. We strive to implement sustainable solutions through rescue operations, feeding programs, medical care, adoption services, and community education.</p>
-        <p>Join us in our mission to make a difference in the lives of these voiceless creatures. Together, we can create a world where every paw has a safe path to follow.</p>
+      
+      <div class="team-section">
+        <h2>Meet Our Team</h2>
+        
+        <div class="team-member">
+          <h3>Vivekbir Narula</h3>
+          <p>Founder & Director</p>
+          <div style="text-align: center; margin: 20px 0;">
+            <img src="/viv.png" alt="Vivekbir Narula" style="max-width: 200px; border-radius: 10px; margin-bottom: 10px;">
+          </div>
+          <p>I’m Vivekbir, a 4th-semester Computer Science student and a passionate animal lover. While I haven’t been actively involved in animal rescue yet, I’m deeply committed to making a difference in the lives of street dogs and cats.</p>
+          <p>With this goal in mind, I created PawPatrol—a project I hope will grow into a meaningful platform for supporting stray animals through technology, community engagement, and compassionate action. I believe every animal deserves kindness, respect, and the chance to live a safe and happy life, and I’m excited to begin contributing to this cause.</p>
+        </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer>
@@ -191,19 +284,5 @@
       <p>&copy; 2023 PawPatrol. All rights reserved.</p>
     </div>
   </footer>
-
-  <script src="js/auth.js"></script>
-  <script>
-    // Mobile menu toggle
-    document.addEventListener('DOMContentLoaded', function() {
-      const hamburger = document.querySelector('.hamburger');
-      const navLinks = document.querySelector('.nav-links');
-      
-      hamburger?.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        hamburger.classList.toggle('active');
-      });
-    });
-  </script>
 </body>
 </html>

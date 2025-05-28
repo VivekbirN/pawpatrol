@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - PawPatrol</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -21,85 +20,173 @@
       --pastel-4: #9ED2C6;
     }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: var(--background-color);
       font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    .contact-section {
-      padding: 80px 0;
-      background-color: var(--pastel-2);
+    /* Background Image */
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1518717758536-85ae29035b6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      z-index: -2;
+      opacity: 0.8;
     }
 
-    .contact-container {
+    /* Light overlay for better text readability */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: -1;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .nav-container {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    .contact-header {
+    
+    .navbar {
+      padding: 15px 0;
+      background-color: var(--card-background);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+    }
+    
+    .nav-links a {
+      color: var(--secondary-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+      color: var(--accent-color);
+    }
+    
+    footer {
+      background-color: var(--card-background);
+      padding: 15px 0;
       text-align: center;
-      margin-bottom: 50px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .contact-header h1 {
-      font-size: 3rem;
-      color: var(--secondary-text);
-      margin-bottom: 20px;
-    }
-
-    .contact-header p {
-      font-size: 1.2rem;
-      color: var(--secondary-text);
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    /* Auth form style adaptation for contact */
-    .contact-form-container {
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    /* Contact Container Styles */
+    .container {
       position: relative;
+      width: 850px;
+      max-width: 95%;
+      height: auto;
+      min-height: 540px;
+      background: var(--card-background);
+      border-radius: 20px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.05);
       overflow: hidden;
-      width: 100%;
-      max-width: 900px;
-      min-height: 550px;
-      margin: 0 auto;
+      margin: 10px auto;
+      border: 1px solid var(--border-color);
     }
 
     .form-container {
       position: absolute;
       top: 0;
       height: 100%;
+      width: 50%;
       transition: all 0.6s ease-in-out;
-    }
-
-    .contact-info-container {
-      left: 0;
-      width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 30px;
+      text-align: center;
       z-index: 2;
+      color: var(--secondary-text);
+      overflow-y: auto;
     }
 
-    .contact-form-container.right-panel-active .contact-info-container {
-      transform: translateX(100%);
-    }
-
-    .contact-form-container {
+    .email-container {
       left: 0;
-      width: 50%;
+    }
+
+    .call-container {
+      left: 100%;
       opacity: 0;
       z-index: 1;
     }
 
-    .contact-form-container.right-panel-active .contact-form-container {
-      transform: translateX(100%);
-      opacity: 1;
-      z-index: 5;
-      animation: show 0.6s;
+    .review-container {
+      left: 100%;
+      opacity: 0;
+      z-index: 1;
     }
 
-    .review-container {
+    .container.call-panel-active .call-container {
+      transform: translateX(-100%);
+      opacity: 1;
+      z-index: 5;
+    }
+
+    .container.call-panel-active .email-container {
+      transform: translateX(-100%);
+    }
+
+    .container.review-panel-active .review-container {
+      transform: translateX(-200%);
+      opacity: 1;
+      z-index: 5;
+    }
+
+    .container.review-panel-active .email-container {
+      transform: translateX(-100%);
+    }
+    
+    /* Overlay container */
+    .overlay-container {
       position: absolute;
       top: 0;
       left: 50%;
@@ -109,14 +196,17 @@
       transition: transform 0.6s ease-in-out;
       z-index: 100;
     }
-
-    .contact-form-container.right-panel-active .review-container {
+    
+    .container.call-panel-active .overlay-container {
       transform: translateX(-100%);
     }
 
+    .container.review-panel-active .overlay-container {
+      transform: translateX(-200%);
+    }
+    
     .overlay {
-      background: var(--accent-color);
-      background: linear-gradient(to right, var(--pastel-3), var(--accent-color));
+      background: linear-gradient(to right, var(--accent-color), #ff4b2b);
       background-repeat: no-repeat;
       background-size: cover;
       background-position: 0 0;
@@ -124,15 +214,19 @@
       position: relative;
       left: -100%;
       height: 100%;
-      width: 200%;
+      width: 300%;
       transform: translateX(0);
       transition: transform 0.6s ease-in-out;
     }
-
-    .contact-form-container.right-panel-active .overlay {
-      transform: translateX(50%);
+    
+    .container.call-panel-active .overlay {
+      transform: translateX(33.33%);
     }
 
+    .container.review-panel-active .overlay {
+      transform: translateX(66.66%);
+    }
+    
     .overlay-panel {
       position: absolute;
       display: flex;
@@ -143,354 +237,415 @@
       text-align: center;
       top: 0;
       height: 100%;
-      width: 50%;
+      width: 33.33%;
       transform: translateX(0);
       transition: transform 0.6s ease-in-out;
     }
-
+    
     .overlay-left {
+      transform: translateX(-20%);
+      left: 0;
+    }
+    
+    .container.call-panel-active .overlay-left {
+      transform: translateX(0);
+    }
+    
+    .overlay-center {
+      right: 33.33%;
+      transform: translateX(0);
+    }
+    
+    .container.call-panel-active .overlay-center {
       transform: translateX(-20%);
     }
 
-    .contact-form-container.right-panel-active .overlay-left {
+    .container.review-panel-active .overlay-center {
       transform: translateX(0);
     }
-
+    
     .overlay-right {
       right: 0;
       transform: translateX(0);
     }
-
-    .contact-form-container.right-panel-active .overlay-right {
-      transform: translateX(20%);
+    
+    .container.call-panel-active .overlay-right {
+      transform: translateX(0);
     }
 
-    .form-container form {
-      background-color: #FFFFFF;
+    .container.review-panel-active .overlay-right {
+      transform: translateX(-20%);
+    }
+
+    /* Form styles */
+    form {
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
-      padding: 0 50px;
-      height: 100%;
-      text-align: center;
+      align-items: center;
+      width: 100%;
     }
 
-    .form-container h2 {
-      font-weight: bold;
-      margin: 0;
-      margin-bottom: 15px;
+    form h2 {
+      margin-bottom: 30px;
       color: var(--secondary-text);
+      font-weight: 600;
     }
 
     .form-group {
       width: 100%;
       margin-bottom: 15px;
-      text-align: left;
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 5px;
-      font-size: 14px;
+      margin-bottom: 8px;
+      font-weight: 500;
       color: var(--secondary-text);
+      text-align: left;
     }
 
-    .form-container input, .form-container textarea {
-      background-color: #eee;
-      border: none;
-      padding: 12px 15px;
-      margin: 8px 0;
+    .form-group input, .form-group textarea {
       width: 100%;
-      font-family: 'Poppins', sans-serif;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: var(--secondary-text);
+      font-size: 0.95rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .form-container textarea {
-      min-height: 100px;
+    .form-group textarea {
+      min-height: 120px;
       resize: vertical;
     }
 
+    .form-group input:hover, .form-group textarea:hover {
+      border-color: #aaa;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.25);
+    }
+
     button {
-      border-radius: 20px;
+      border-radius: 30px;
       border: 1px solid var(--accent-color);
       background-color: var(--accent-color);
       color: #FFFFFF;
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 600;
       padding: 12px 45px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      transition: transform 80ms ease-in;
+      transition: transform 0.3s ease;
       cursor: pointer;
+      margin-top: 20px;
     }
 
-    button:active {
+    button:hover {
       transform: scale(0.95);
-    }
-
-    button:focus {
-      outline: none;
     }
 
     button.ghost {
       background-color: transparent;
       border-color: #FFFFFF;
     }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      margin-top: 20px;
-      width: 100%;
+    
+    button.back-btn {
+      background-color: transparent;
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    button.back-btn:hover {
+      background-color: rgba(230, 0, 35, 0.1);
     }
 
-    .contact-info-item {
-      display: flex;
-      align-items: center;
+    .contact-info {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .contact-info i {
+      font-size: 2.5rem;
+      color: var(--accent-color);
       margin-bottom: 15px;
     }
 
-    .contact-info-item i {
-      font-size: 20px;
-      color: var(--accent-color);
-      margin-right: 15px;
-      width: 25px;
-      text-align: center;
-    }
-
-    .contact-info-item span {
-      font-size: 16px;
+    .contact-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
       color: var(--secondary-text);
     }
 
-    .social-icons {
-      display: flex;
-      margin-top: 20px;
-      gap: 15px;
+    .contact-info p {
+      font-size: 1.1rem;
+      color: #555;
+      line-height: 1.6;
     }
 
-    .social-icons a {
+    .contact-info a {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+
+    .rating {
       display: flex;
-      align-items: center;
+      flex-direction: row-reverse;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-color: var(--accent-color);
-      color: white;
-      font-size: 18px;
-      transition: all 0.3s ease;
+      margin: 20px 0;
     }
 
-    .social-icons a:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    .rating input {
+      display: none;
+    }
+
+    .rating label {
+      cursor: pointer;
+      font-size: 30px;
+      color: #ccc;
+      transition: color 0.3s ease;
+    }
+
+    .rating label:hover,
+    .rating label:hover ~ label,
+    .rating input:checked ~ label {
+      color: #ffcc00;
     }
 
     @media (max-width: 768px) {
-      .contact-form-container {
-        min-height: 800px;
+      .container {
+        height: auto;
+        min-height: 650px;
+        max-width: 90%;
       }
 
-      .contact-info-container, .review-container {
+      .form-container {
         width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
+        padding: 20px 15px;
       }
 
-      .review-container {
-        height: 100%;
-        transform: translateY(0);
-      }
-
-      .overlay {
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      .overlay-panel {
+      .email-container, .call-container, .review-container {
         width: 100%;
       }
 
-      .contact-form-container.right-panel-active .contact-info-container {
-        transform: translateY(-100%);
-      }
-
-      .contact-form-container.right-panel-active .review-container {
-        transform: translateY(0);
-      }
-
-      .contact-header h1 {
-        font-size: 2.5rem;
-      }
-
-      .mobile-toggle {
-        display: block;
-        margin-top: 20px;
-      }
-
-      .mobile-toggle p {
-        font-size: 14px;
-        color: var(--secondary-text);
-      }
-
-      .mobile-toggle a {
-        color: var(--accent-color);
-        text-decoration: none;
-        font-weight: 600;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .mobile-toggle {
+      .overlay-container {
         display: none;
+      }
+
+      .call-container, .review-container {
+        opacity: 1;
+        z-index: 5;
+      }
+
+      .email-container {
+        z-index: 1;
+      }
+
+      .container.call-panel-active .email-container {
+        transform: translateX(-100%);
+      }
+
+      .container.call-panel-active .call-container {
+        transform: translateX(0);
+      }
+
+      .container.review-panel-active .email-container {
+        transform: translateX(-100%);
+      }
+
+      .container.review-panel-active .call-container {
+        transform: translateX(-100%);
+      }
+
+      .container.review-panel-active .review-container {
+        transform: translateX(0);
+      }
+
+      .mobile-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      .mobile-nav button {
+        padding: 8px 15px;
+        font-size: 12px;
+        margin: 0;
+      }
+      
+      button.back-btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Background Image -->
+  <div class="background-image"></div>
+
+  <!-- Navigation -->
   <header>
     <nav class="navbar">
-      <div class="logo">
-        <h1>PawPatrol</h1>
-      </div>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="animals.html">Animals</a></li>
-        <li><a href="adoption.html">Adoption</a></li>
-        <li><a href="feeding.html">Feeding</a></li>
-        <li><a href="lostfound.html">Lost & Found</a></li>
-        <li><a href="rescue.html">Rescue</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html" class="active">Contact</a></li>
-      </ul>
-      <div class="auth-buttons">
-        <a href="new_auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
-        <a href="new_auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
-        <a href="#" id="logoutBtn" class="btn auth-btn login-btn" style="display: none;">Logout</a>
-      </div>
-      <div class="hamburger">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="feeding.html">Feeding</a></li>
+          <li><a href="lostfound.html">Lost & Found</a></li>
+          <li><a href="rescue.html">Rescue</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
       </div>
     </nav>
   </header>
 
+  <!-- Contact Container -->
   <main>
-    <section class="contact-section">
-      <div class="contact-container">
-        <div class="contact-header">
-          <h1>Contact Us</h1>
-          <p>We'd love to hear from you! Reach out to us with any questions, concerns, or if you'd like to get involved.</p>
+    <div class="container" id="container">
+      <div class="form-container email-container">
+        <form id="emailForm">
+          <h2>Email Us</h2>
+          <div class="contact-info">
+            <i class="fas fa-envelope"></i>
+            <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your Name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Your Email" required />
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" placeholder="Subject" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Your Message" required></textarea>
+          </div>
+          <button type="submit">Send Message</button>
+          
+          <div class="mobile-nav">
+            <button type="button" id="callMobile" class="ghost">Call Us</button>
+            <button type="button" id="reviewMobile" class="ghost">Leave Review</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="form-container call-container">
+        <div class="contact-info">
+          <i class="fas fa-phone-alt"></i>
+          <h3>Call Us</h3>
+          <p>Have questions or need immediate assistance? Give us a call!</p>
+          <p><a href="tel:+919876543210">+91 9876543210</a></p>
+          <p>Available Monday to Friday, 9am - 6pm</p>
+          <p>Weekends, 10am - 4pm</p>
+        </div>
+        <div class="contact-info">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>Visit Us</h3>
+          <p>123 Pet Street, Animal City</p>
+          <p>New Delhi, India</p>
         </div>
         
-        <div class="contact-form-container" id="container">
-          <div class="form-container contact-info-container">
-            <form id="contactForm">
-              <h2>Send Us a Message</h2>
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" placeholder="Your Name" required />
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Your Email" required />
-              </div>
-              <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" placeholder="Subject" required />
-              </div>
-              <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" placeholder="Your Message" required></textarea>
-              </div>
-              <button type="submit">Send Message</button>
-              <div class="mobile-toggle">
-                <p>Want to leave a review? <a href="#" id="reviewMobile">Click here</a></p>
-              </div>
-            </form>
-          </div>
-          
-          <div class="review-container">
-            <div class="overlay">
-              <div class="overlay-panel overlay-left">
-                <h2>Send Us a Message</h2>
-                <p>We're here to help! Contact us with any questions or concerns about our pet care services.</p>
-                <button class="ghost" id="contact">Contact Us</button>
-              </div>
-              <div class="overlay-panel overlay-right">
-                <h2>Leave a Review</h2>
-                <p>Share your experience with our services and help us improve!</p>
-                <button class="ghost" id="review">Write a Review</button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-container review-container">
-            <form id="reviewForm">
-              <h2>Leave a Review</h2>
-              <div class="form-group">
-                <label for="reviewName">Name</label>
-                <input type="text" id="reviewName" placeholder="Your Name" required />
-              </div>
-              <div class="form-group">
-                <label for="reviewEmail">Email</label>
-                <input type="email" id="reviewEmail" placeholder="Your Email" required />
-              </div>
-              <div class="form-group">
-                <label for="rating">Rating</label>
-                <select id="rating" required>
-                  <option value="">Select Rating</option>
-                  <option value="5">5 - Excellent</option>
-                  <option value="4">4 - Very Good</option>
-                  <option value="3">3 - Good</option>
-                  <option value="2">2 - Fair</option>
-                  <option value="1">1 - Poor</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="reviewText">Your Review</label>
-                <textarea id="reviewText" placeholder="Share your experience with us" required></textarea>
-              </div>
-              <button type="submit">Submit Review</button>
-              <div class="mobile-toggle">
-                <p>Need to contact us? <a href="#" id="contactMobile">Click here</a></p>
-              </div>
-            </form>
-          </div>
+        <div class="mobile-nav">
+          <button type="button" id="emailMobile" class="ghost">Email Us</button>
+          <button type="button" id="reviewFromCallMobile" class="ghost">Leave Review</button>
         </div>
-        
-        <div style="margin-top: 50px; text-align: center;">
-          <h2 style="color: var(--secondary-text); margin-bottom: 30px;">Get in Touch</h2>
-          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
-            <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); flex: 1; min-width: 250px; max-width: 350px;">
-              <i class="fas fa-envelope" style="font-size: 40px; color: var(--accent-color); margin-bottom: 20px;"></i>
-              <h3 style="margin-bottom: 15px; color: var(--secondary-text);">Email Us</h3>
-              <p style="color: var(--secondary-text); margin-bottom: 15px;">We'll respond as soon as possible</p>
-              <a href="mailto:info@pawpatrol.com" style="color: var(--accent-color); font-weight: 600; text-decoration: none;">info@pawpatrol.com</a>
+      </div>
+      
+      <div class="form-container review-container">
+        <form id="reviewForm">
+          <h2>Leave a Review</h2>
+          <div class="contact-info">
+            <i class="fas fa-star"></i>
+            <p>We value your feedback! Let us know about your experience with PetCare.</p>
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewName">Name</label>
+            <input type="text" id="reviewName" placeholder="Your Name" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewEmail">Email</label>
+            <input type="email" id="reviewEmail" placeholder="Your Email" required />
+          </div>
+          
+          <div class="form-group">
+            <label>Rating</label>
+            <div class="rating">
+              <input type="radio" id="star5" name="rating" value="5" />
+              <label for="star5">★</label>
+              <input type="radio" id="star4" name="rating" value="4" />
+              <label for="star4">★</label>
+              <input type="radio" id="star3" name="rating" value="3" />
+              <label for="star3">★</label>
+              <input type="radio" id="star2" name="rating" value="2" />
+              <label for="star2">★</label>
+              <input type="radio" id="star1" name="rating" value="1" />
+              <label for="star1">★</label>
             </div>
-            
-            <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); flex: 1; min-width: 250px; max-width: 350px;">
-              <i class="fas fa-phone-alt" style="font-size: 40px; color: var(--accent-color); margin-bottom: 20px;"></i>
-              <h3 style="margin-bottom: 15px; color: var(--secondary-text);">Call Us</h3>
-              <p style="color: var(--secondary-text); margin-bottom: 15px;">Mon-Fri from 9am to 6pm</p>
-              <a href="tel:+1234567890" style="color: var(--accent-color); font-weight: 600; text-decoration: none;">+1 (234) 567-890</a>
-            </div>
-            
-            <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); flex: 1; min-width: 250px; max-width: 350px;">
-              <i class="fas fa-map-marker-alt" style="font-size: 40px; color: var(--accent-color); margin-bottom: 20px;"></i>
-              <h3 style="margin-bottom: 15px; color: var(--secondary-text);">Visit Us</h3>
-              <p style="color: var(--secondary-text); margin-bottom: 15px;">Come see our facility</p>
-              <address style="font-style: normal; color: var(--secondary-text);">123 Pet Street, Animal City, AC 12345</address>
-            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="reviewMessage">Your Review</label>
+            <textarea id="reviewMessage" placeholder="Share your experience with us" required></textarea>
+          </div>
+          
+          <button type="submit">Submit Review</button>
+          <button type="button" id="backToExperience" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Share Your Experience</button>
+          
+          <div class="mobile-nav">
+            <button type="button" id="backToExperienceMobile" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Experience</button>
+          </div>
+          <div class="mobile-nav" style="margin-top: 10px;">
+            <button type="button" id="emailFromReviewMobile" class="ghost">Email Us</button>
+            <button type="button" id="callFromReviewMobile" class="ghost">Call Us</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h2>Need to Talk?</h2>
+            <p>Call us directly for immediate assistance with your pet care needs</p>
+            <button class="ghost" id="call">Call Now</button>
+          </div>
+          <div class="overlay-panel overlay-center">
+            <h2>Share Your Experience</h2>
+            <p>Your feedback helps us improve our services for all pet lovers</p>
+            <button class="ghost" id="review">Leave a Review</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h2>Questions?</h2>
+            <p>Send us an email and we'll get back to you as soon as possible</p>
+            <button class="ghost" id="email">Email Us</button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer>
@@ -499,56 +654,94 @@
     </div>
   </footer>
 
-  <script src="js/auth.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Mobile menu toggle
-      const hamburger = document.querySelector('.hamburger');
-      const navLinks = document.querySelector('.nav-links');
-      
-      hamburger?.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        hamburger.classList.toggle('active');
-      });
-      
-      // Contact form panel toggle
-      const contactButton = document.getElementById('contact');
+      const callButton = document.getElementById('call');
+      const emailButton = document.getElementById('email');
       const reviewButton = document.getElementById('review');
-      const contactMobileButton = document.getElementById('contactMobile');
+      const callMobileButton = document.getElementById('callMobile');
+      const emailMobileButton = document.getElementById('emailMobile');
       const reviewMobileButton = document.getElementById('reviewMobile');
+      const reviewFromCallMobileButton = document.getElementById('reviewFromCallMobile');
+      const emailFromReviewMobileButton = document.getElementById('emailFromReviewMobile');
+      const callFromReviewMobileButton = document.getElementById('callFromReviewMobile');
+      const backToExperienceButton = document.getElementById('backToExperience');
+      const backToExperienceMobileButton = document.getElementById('backToExperienceMobile');
       const container = document.getElementById('container');
       
       // Desktop panel toggle
-      reviewButton?.addEventListener('click', () => {
-        container.classList.add('right-panel-active');
+      callButton?.addEventListener('click', () => {
+        container.classList.add('call-panel-active');
+        container.classList.remove('review-panel-active');
       });
 
-      contactButton?.addEventListener('click', () => {
-        container.classList.remove('right-panel-active');
+      emailButton?.addEventListener('click', () => {
+        container.classList.remove('call-panel-active');
+        container.classList.remove('review-panel-active');
+      });
+
+      reviewButton?.addEventListener('click', () => {
+        container.classList.add('review-panel-active');
+        container.classList.remove('call-panel-active');
       });
 
       // Mobile toggle
-      reviewMobileButton?.addEventListener('click', (e) => {
-        e.preventDefault();
-        container.classList.add('right-panel-active');
+      callMobileButton?.addEventListener('click', () => {
+        container.classList.add('call-panel-active');
+        container.classList.remove('review-panel-active');
       });
 
-      contactMobileButton?.addEventListener('click', (e) => {
-        e.preventDefault();
-        container.classList.remove('right-panel-active');
+      emailMobileButton?.addEventListener('click', () => {
+        container.classList.remove('call-panel-active');
+        container.classList.remove('review-panel-active');
+      });
+
+      reviewMobileButton?.addEventListener('click', () => {
+        container.classList.add('review-panel-active');
+        container.classList.remove('call-panel-active');
       });
       
-      // Form submissions
-      document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+      // Back to Share Your Experience button
+      backToExperienceButton?.addEventListener('click', () => {
+        container.classList.remove('review-panel-active');
+        container.classList.remove('call-panel-active');
+      });
+      
+      // Mobile back button
+      backToExperienceMobileButton?.addEventListener('click', () => {
+        container.classList.remove('review-panel-active');
+        container.classList.remove('call-panel-active');
+      });
+
+      reviewFromCallMobileButton?.addEventListener('click', () => {
+        container.classList.add('review-panel-active');
+        container.classList.remove('call-panel-active');
+      });
+
+      emailFromReviewMobileButton?.addEventListener('click', () => {
+        container.classList.remove('call-panel-active');
+        container.classList.remove('review-panel-active');
+      });
+
+      callFromReviewMobileButton?.addEventListener('click', () => {
+        container.classList.add('call-panel-active');
+        container.classList.remove('review-panel-active');
+      });
+
+      // Form submission handlers
+      document.getElementById('emailForm')?.addEventListener('submit', function(e) {
         e.preventDefault();
         alert('Thank you for your message! We will get back to you soon.');
         this.reset();
       });
-      
+
       document.getElementById('reviewForm')?.addEventListener('submit', function(e) {
         e.preventDefault();
         alert('Thank you for your review! We appreciate your feedback.');
         this.reset();
+        // Return to main panel after submitting review
+        container.classList.remove('review-panel-active');
+        container.classList.remove('call-panel-active');
       });
     });
   </script>

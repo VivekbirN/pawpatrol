@@ -139,6 +139,17 @@ CREATE TABLE IF NOT EXISTS rescue_requests (
   FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
 );
 
+-- Admin staff table
+CREATE TABLE IF NOT EXISTS admin_staff (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  phone_number VARCHAR(20) NULL,
+  email_id VARCHAR(100) NOT NULL,
+  role ENUM('veterinary', 'staff') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- Insert default admin user (password: admin123)
 INSERT INTO users (username, email, password, role, full_name)
 VALUES ('admin', 'admin@example.com', '$2a$10$eCc/ZVe9uTbVtQY9.UbfO.aLrI2.5.1EBY1.ZGGWLZcBcAu.YZvwW', 'admin', 'System Administrator');

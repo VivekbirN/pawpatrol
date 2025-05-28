@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Tracking - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Pinterest-style theme */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--background-color);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Image */
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1612531385446-f7e6d131e1d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      z-index: -2;
+      opacity: 0.6;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    .page-header {
+      text-align: center;
+      padding: 40px 0 20px;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 15px;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    /* Health Tracking Styles */
+    .health-tracking-container {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 30px;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--accent-color);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Search and Filter */
+    .search-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 15px 12px 40px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    .filter-dropdown {
+      min-width: 200px;
+    }
+
+    .filter-dropdown select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 16px;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23999" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    /* Animal Health Cards */
+    .health-records {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .health-card {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .health-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .health-card-header {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .animal-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 15px;
+    }
+
+    .animal-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .animal-info h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .animal-info p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .health-card-body {
+      padding: 15px;
+    }
+
+    .health-status {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .status-healthy {
+      background-color: #4CAF50;
+    }
+
+    .status-attention {
+      background-color: #FFC107;
+    }
+
+    .status-critical {
+      background-color: #F44336;
+    }
+
+    .health-details {
+      margin-top: 15px;
+    }
+
+    .health-detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .health-detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .health-card-footer {
+      padding: 15px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .update-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .update-btn:hover {
+      background-color: #d10021;
+      transform: translateY(-2px);
+    }
+
+    /* Add Health Record Form */
+    .add-record-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--secondary-text);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 16px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .submit-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #d10021;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Image -->
+  <div class="background-image"></div>
+  <div class="overlay"></div>
+
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="feeding.html">Feeding</a></li>
+          <li><a href="lostfound.html">Lost & Found</a></li>
+          <li><a href="rescue.html">Rescue</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="auth-buttons">
+        <a href="auth.html" id="loginBtn" class="btn auth-btn login-btn">Login</a>
+        <a href="auth.html?mode=register" id="registerBtn" class="btn auth-btn register-btn">Register</a>
+        <a href="#" id="logoutBtn" class="btn auth-btn login-btn" style="display: none;">Logout</a>
+      </div>
+      <div class="burger">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h1>Health Tracking</h1>
+      <p>Monitor vaccinations and medical treatments for street animals to ensure their well-being.</p>
+    </section>
+
+    <section class="health-tracking-section">
+      <div class="health-tracking-container">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="records">Health Records</button>
+          <button class="tab-btn" data-tab="add-record">Add New Record</button>
+          <button class="tab-btn" data-tab="vaccination">Vaccination Schedule</button>
+          <button class="tab-btn" data-tab="treatments">Treatment History</button>
+        </div>
+
+        <!-- Health Records Tab -->
+        <div class="tab-content active" id="records">
+          <div class="search-filter">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search by animal name or ID...">
+            </div>
+            <div class="filter-dropdown">
+              <select>
+                <option value="all">All Health Status</option>
+                <option value="healthy">Healthy</option>
+                <option value="attention">Needs Attention</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="health-records">
+            <!-- Health Card 1 -->
+            <div class="health-card">
+              <div class="health-card-header">
+                <div class="animal-avatar">
+                  <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Max">
+                </div>
+                <div class="animal-info">
+                  <h3>Max</h3>
+                  <p>Dog - Male - ID: A001</p>
+                </div>
+              </div>
+              <div class="health-card-body">
+                <div class="health-status">
+                  <div class="status-indicator status-healthy"></div>
+                  <span>Healthy</span>
+                </div>
+                <div class="health-details">
+                  <div class="health-detail-item">
+                    <span>Last Check-up:</span>
+                    <span>May 15, 2023</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Vaccinations:</span>
+                    <span>Up to date</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Weight:</span>
+                    <span>15 kg</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Next Appointment:</span>
+                    <span>Aug 15, 2023</span>
+                  </div>
+                </div>
+              </div>
+              <div class="health-card-footer">
+                <a href="#" class="update-btn">Update Record</a>
+              </div>
+            </div>
+
+            <!-- Health Card 2 -->
+            <div class="health-card">
+              <div class="health-card-header">
+                <div class="animal-avatar">
+                  <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Luna">
+                </div>
+                <div class="animal-info">
+                  <h3>Luna</h3>
+                  <p>Cat - Female - ID: A002</p>
+                </div>
+              </div>
+              <div class="health-card-body">
+                <div class="health-status">
+                  <div class="status-indicator status-attention"></div>
+                  <span>Needs Attention</span>
+                </div>
+                <div class="health-details">
+                  <div class="health-detail-item">
+                    <span>Last Check-up:</span>
+                    <span>June 2, 2023</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Vaccinations:</span>
+                    <span>Due for booster</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Weight:</span>
+                    <span>3.5 kg</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Next Appointment:</span>
+                    <span>June 15, 2023</span>
+                  </div>
+                </div>
+              </div>
+              <div class="health-card-footer">
+                <a href="#" class="update-btn">Update Record</a>
+              </div>
+            </div>
+
+            <!-- Health Card 3 -->
+            <div class="health-card">
+              <div class="health-card-header">
+                <div class="animal-avatar">
+                  <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Rocky">
+                </div>
+                <div class="animal-info">
+                  <h3>Rocky</h3>
+                  <p>Dog - Male - ID: A003</p>
+                </div>
+              </div>
+              <div class="health-card-body">
+                <div class="health-status">
+                  <div class="status-indicator status-critical"></div>
+                  <span>Critical</span>
+                </div>
+                <div class="health-details">
+                  <div class="health-detail-item">
+                    <span>Last Check-up:</span>
+                    <span>June 10, 2023</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Vaccinations:</span>
+                    <span>Pending</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Weight:</span>
+                    <span>12 kg</span>
+                  </div>
+                  <div class="health-detail-item">
+                    <span>Next Appointment:</span>
+                    <span>June 12, 2023</span>
+                  </div>
+                </div>
+              </div>
+              <div class="health-card-footer">
+                <a href="#" class="update-btn">Update Record</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add New Record Tab -->
+        <div class="tab-content" id="add-record">
+          <div class="add-record-form">
+            <form id="healthRecordForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="animalId">Animal ID *</label>
+                  <input type="text" id="animalId" name="animalId" placeholder="Enter animal ID" required>
+                </div>
+                <div class="form-group">
+                  <label for="animalName">Animal Name *</label>
+                  <input type="text" id="animalName" name="animalName" placeholder="Enter animal name" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="checkupDate">Check-up Date *</label>
+                  <input type="date" id="checkupDate" name="checkupDate" required>
+                </div>
+                <div class="form-group">
+                  <label for="healthStatus">Health Status *</label>
+                  <select id="healthStatus" name="healthStatus" required>
+                    <option value="" disabled selected>Select health status</option>
+                    <option value="healthy">Healthy</option>
+                    <option value="attention">Needs Attention</option>
+                    <option value="critical">Critical</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="weight">Weight (kg)</label>
+                  <input type="number" id="weight" name="weight" step="0.1" placeholder="Enter weight in kg">
+                </div>
+                <div class="form-group">
+                  <label for="temperature">Temperature (°C)</label>
+                  <input type="number" id="temperature" name="temperature" step="0.1" placeholder="Enter temperature in °C">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="vaccinations">Vaccinations</label>
+                <select id="vaccinations" name="vaccinations">
+                  <option value="" disabled selected>Select vaccination status</option>
+                  <option value="up_to_date">Up to date</option>
+                  <option value="due">Due for vaccination</option>
+                  <option value="pending">Pending</option>
+                  <option value="not_applicable">Not applicable</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="medications">Medications Prescribed</label>
+                <textarea id="medications" name="medications" placeholder="List any medications prescribed"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" name="notes" placeholder="Any additional notes or observations"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="nextAppointment">Next Appointment Date</label>
+                <input type="date" id="nextAppointment" name="nextAppointment">
+              </div>
+
+              <div class="form-group" style="text-align: center;">
+                <button type="submit" class="submit-btn">Save Health Record</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Vaccination Schedule Tab -->
+        <div class="tab-content" id="vaccination">
+          <p style="text-align: center; padding: 40px 0;">Vaccination schedule content will be available soon.</p>
+        </div>
+
+        <!-- Treatment History Tab -->
+        <div class="tab-content" id="treatments">
+          <p style="text-align: center; padding: 40px 0;">Treatment history content will be available soon.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h2>PawPatrol</h2>
+          <p>Helping street animals since 2023</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="animals.html">Animals</a></li>
+            <li><a href="adoption.html">Adoption</a></li>
+            <li><a href="feeding.html">Feeding</a></li>
+            <li><a href="lostfound.html">Lost & Found</a></li>
+            <li><a href="rescue.html">Rescue</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact Us</h3>
+          <p><i class="fas fa-envelope"></i> info@pawpatrol.org</p>
+          <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 PawPatrol. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons and contents
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Add active class to clicked button and corresponding content
+          this.classList.add('active');
+          const tabId = this.dataset.tab;
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+
+      // Form submission
+      const healthForm = document.getElementById('healthRecordForm');
+      if (healthForm) {
+        healthForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // In a real application, you would send this data to a server
+          // For now, we'll just show an alert
+          alert('Health record saved successfully!');
+          healthForm.reset();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

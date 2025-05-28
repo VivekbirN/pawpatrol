@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login & Register - PetCare</title>
+  <title>Login & Register - PawPatrol</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -101,6 +101,16 @@
       align-items: center;
     }
     
+    .logo {
+      margin-right: 20px;
+    }
+    
+    .nav-links {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    
     .navbar {
       padding: 15px 0;
       background-color: var(--card-background);
@@ -129,6 +139,38 @@
     
     .nav-links a:hover {
       color: var(--accent-color);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .login-btn, .register-btn {
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      display: inline-block;
+    }
+    
+    .login-btn {
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      background-color: white;
+    }
+    
+    .register-btn {
+      color: white;
+      background-color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+    }
+    
+    .login-btn:hover, .register-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     footer {
@@ -443,6 +485,25 @@
       .role-card {
         margin-bottom: 10px;
       }
+      
+      .nav-container {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      
+      .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      
+      .auth-buttons {
+        order: 2;
+        margin-left: auto;
+      }
     }
     
     @media (max-width: 480px) {
@@ -473,7 +534,7 @@
   <header>
     <nav class="navbar">
       <div class="nav-container">
-        <a href="index.html" class="logo">PetCare</a>
+        <a href="index.html" class="logo">PawPatrol</a>
         <ul class="nav-links" id="navLinks">
           <li><a href="index.html">Home</a></li>
           <li><a href="animals.html">Animals</a></li>
@@ -484,6 +545,10 @@
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
+        <div class="auth-buttons">
+          <a href="new_auth.html" class="login-btn">Login</a>
+          <a href="new_auth.html?mode=register" class="register-btn">Register</a>
+        </div>
       </div>
     </nav>
   </header>
@@ -505,6 +570,10 @@
           <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Password" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Phone Number" />
           </div>
           
           <div class="role-selection">
@@ -572,6 +641,7 @@
     </div>
   </footer>
 
+  <script src="js/api.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const signUpButton = document.getElementById('signUp');
@@ -681,83 +751,87 @@
       }
 
       // Form submission handlers
-      document.getElementById('loginForm').addEventListener('submit', function(e) {
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         if (validateForm(this)) {
-          // Get form data
-          const email = document.getElementById('loginEmail').value;
-          const password = document.getElementById('loginPassword').value;
-          
-          // Simulate login (in a real app, this would be an API call)
-          // For demo purposes, we'll use localStorage to simulate authentication
-          const users = JSON.parse(localStorage.getItem('petcare_users') || '[]');
-          const user = users.find(u => u.email === email && u.password === password);
-          
-          if (user) {
-            // Store logged in user info
-            localStorage.setItem('petcare_current_user', JSON.stringify({
-              name: user.name,
-              email: user.email,
-              role: user.role
-            }));
+          try {
+            // Get form data
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
             
-            // Show success message and redirect
+            // Call API to login user
+            const result = await window.authApi.loginUser({ email, password });
+            
+            // Show success message
             alert('Login successful!');
-            window.location.href = 'index.html';
-          } else {
-            alert('Invalid email or password. Please try again.');
+            
+            // Redirect based on user role
+            if (result.user.role === 'admin') {
+              window.location.href = 'admin_dashboard.html';
+            } else if (result.user.role === 'vet') {
+              window.location.href = 'vet_dashboard.html';
+            } else {
+              window.location.href = 'user_dashboard.html';
+            }
+          } catch (error) {
+            alert(error.message || 'Login failed. Please try again.');
           }
         }
       });
 
-      document.getElementById('registerForm').addEventListener('submit', function(e) {
+      document.getElementById('registerForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         if (validateForm(this)) {
-          // Get form data
-          const name = document.getElementById('name').value;
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
-          
-          // Get users from localStorage or initialize empty array
-          const users = JSON.parse(localStorage.getItem('petcare_users') || '[]');
-          
-          // Check if user already exists
-          if (users.some(user => user.email === email)) {
-            alert('A user with this email already exists. Please use a different email or login.');
-            return;
+          try {
+            // Get form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone')?.value || '';
+            
+            // Prepare user data for API
+            const userData = {
+              name,
+              email,
+              password,
+              phone,
+              role: selectedRole
+            };
+            
+            // Call API to register user
+            const result = await window.authApi.registerUser(userData);
+            
+            // Show success message
+            alert('Registration successful! You are now logged in.');
+            
+            // Redirect based on user role
+            if (result.user.role === 'admin') {
+              window.location.href = 'admin_dashboard.html';
+            } else if (result.user.role === 'vet') {
+              window.location.href = 'vet_dashboard.html';
+            } else {
+              window.location.href = 'user_dashboard.html';
+            }
+          } catch (error) {
+            alert(error.message || 'Registration failed. Please try again.');
           }
-          
-          // Add new user
-          users.push({
-            name,
-            email,
-            password, // Note: In a real app, never store passwords in plain text
-            role: selectedRole
-          });
-          
-          // Save updated users array
-          localStorage.setItem('petcare_users', JSON.stringify(users));
-          
-          // Auto login the new user
-          localStorage.setItem('petcare_current_user', JSON.stringify({
-            name,
-            email,
-            role: selectedRole
-          }));
-          
-          // Show success message and redirect
-          alert('Registration successful! You are now logged in.');
-          window.location.href = 'index.html';
         }
       });
       
       // Check if user is already logged in
+      const token = localStorage.getItem('petcare_token');
       const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
-      if (currentUser) {
-        // You could redirect to dashboard or show user info
-        console.log('User already logged in:', currentUser);
+      if (token && currentUser) {
+        // Redirect based on user role
+        if (currentUser.role === 'admin') {
+          window.location.href = 'admin_dashboard.html';
+        } else if (currentUser.role === 'vet') {
+          window.location.href = 'vet_dashboard.html';
+        } else {
+          window.location.href = 'user_dashboard.html';
+        }
       }
     });
   </script>

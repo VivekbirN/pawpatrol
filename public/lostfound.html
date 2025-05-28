@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Page specific styles */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+    }
+
+    .page-header {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: var(--pastel-2);
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 15px;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      padding: 15px 30px;
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--accent-color);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-color);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-container {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--secondary-text);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-color);
+      outline: none;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px;
+    }
+
+    .form-col {
+      flex: 1;
+      padding: 0 10px;
+      min-width: 250px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #d00020;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .image-preview {
+      width: 100%;
+      height: 200px;
+      border: 2px dashed var(--border-color);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .image-preview-placeholder {
+      color: #999;
+      text-align: center;
+    }
+
+    .image-preview-placeholder i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .reports-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .report-card {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .report-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .report-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .report-details {
+      padding: 20px;
+    }
+
+    .report-type {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .report-type.lost {
+      background-color: #ffecec;
+      color: #e74c3c;
+    }
+
+    .report-type.found {
+      background-color: #ecffec;
+      color: #2ecc71;
+    }
+
+    .report-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--secondary-text);
+    }
+
+    .report-info {
+      margin-bottom: 5px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .report-info i {
+      width: 20px;
+      margin-right: 5px;
+      color: var(--accent-color);
+    }
+
+    .report-contact {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .report-contact-btn {
+      display: inline-block;
+      padding: 8px 15px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .report-contact-btn:hover {
+      background-color: #d00020;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+
+      .form-col {
+        width: 100%;
+      }
+
+      .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="logo">PawPatrol</a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="feeding.html">Feeding</a></li>
+          <li><a href="health.html">Health</a></li>
+          <li><a href="lostfound.html" class="active">Lost & Found</a></li>
+          <li><a href="rescue.html">Rescue</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <a href="new_auth.html?mode=login" id="loginBtn" class="login-btn">Login</a>
+          <a href="new_auth.html?mode=register" id="registerBtn" class="register-btn">Register</a>
+          <a href="#" id="logoutBtn" class="login-btn" style="display: none;">Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <h1>Lost & Found</h1>
+    <p>Help reunite lost pets with their owners or report animals you've found. Together, we can make a difference in the lives of these animals.</p>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="report-tab">Report Lost/Found</button>
+      <button class="tab-btn" data-tab="view-tab">View Reports</button>
+    </div>
+
+    <div class="tab-content active" id="report-tab">
+      <div class="form-container">
+        <h2 class="form-title">Submit a Report</h2>
+        <form id="lostFoundForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Report Type</label>
+            <div class="form-row">
+              <div class="form-col">
+                <label>
+                  <input type="radio" name="reportType" value="lost" checked> I lost a pet
+                </label>
+              </div>
+              <div class="form-col">
+                <label>
+                  <input type="radio" name="reportType" value="found"> I found a pet
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="species">Species</label>
+                <select id="species" name="species" class="form-control" required>
+                  <option value="">Select Species</option>
+                  <option value="dog">Dog</option>
+                  <option value="cat">Cat</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="breed">Breed (if known)</label>
+                <input type="text" id="breed" name="breed" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="color">Color</label>
+                <input type="text" id="color" name="color" class="form-control">
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" class="form-control">
+                  <option value="unknown">Unknown</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" class="form-control" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="photo">Photo</label>
+            <div class="image-preview" id="imagePreview">
+              <div class="image-preview-placeholder">
+                <i class="fas fa-camera"></i>
+                <p>Click to upload an image</p>
+              </div>
+            </div>
+            <input type="file" id="photo" name="photo" accept="image/*" style="display: none;">
+            <button type="button" id="uploadBtn" class="btn btn-secondary">Upload Photo</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="contactName">Your Name</label>
+                <input type="text" id="contactName" name="contactName" class="form-control" required>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="contactPhone">Phone Number</label>
+                <input type="tel" id="contactPhone" name="contactPhone" class="form-control" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactEmail">Email (optional)</label>
+            <input type="email" id="contactEmail" name="contactEmail" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn">Submit Report</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="tab-content" id="view-tab">
+      <div class="reports-container" id="reportsContainer">
+        <!-- Reports will be loaded here dynamically -->
+        <div class="loading-message">Loading reports...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab switching functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const tabId = this.getAttribute('data-tab');
+          
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active class to current button and content
+          this.classList.add('active');
+          document.getElementById(tabId).classList.add('active');
+          
+          // If view tab is selected, load reports
+          if (tabId === 'view-tab') {
+            loadReports();
+          }
+        });
+      });
+
+      // Image upload preview
+      const imagePreview = document.getElementById('imagePreview');
+      const photoInput = document.getElementById('photo');
+      const uploadBtn = document.getElementById('uploadBtn');
+
+      uploadBtn.addEventListener('click', function() {
+        photoInput.click();
+      });
+
+      imagePreview.addEventListener('click', function() {
+        photoInput.click();
+      });
+
+      photoInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Form submission
+      const lostFoundForm = document.getElementById('lostFoundForm');
+      lostFoundForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
+        if (!currentUser) {
+          alert('Please login to submit a report');
+          window.location.href = 'new_auth.html?mode=login';
+          return;
+        }
+        
+        try {
+          const formData = new FormData(this);
+          formData.append('reportDate', new Date().toISOString().split('T')[0]);
+          formData.append('reportedBy', currentUser.id);
+          
+          // Add loading state
+          const submitBtn = this.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = 'Submitting...';
+          submitBtn.disabled = true;
+          
+          // Send the form data to the server
+          const response = await fetch('/api/lostfound', {
+            method: 'POST',
+            headers: {
+              'x-auth-token': localStorage.getItem('petcare_token')
+            },
+            body: formData
+          });
+          
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.message || 'Failed to submit report');
+          }
+          
+          // Reset form and show success message
+          lostFoundForm.reset();
+          imagePreview.innerHTML = `
+            <div class="image-preview-placeholder">
+              <i class="fas fa-camera"></i>
+              <p>Click to upload an image</p>
+            </div>
+          `;
+          alert('Report submitted successfully!');
+          
+          // Switch to view tab
+          document.querySelector('[data-tab="view-tab"]').click();
+        } catch (error) {
+          console.error('Error submitting report:', error);
+          alert(error.message || 'An error occurred. Please try again.');
+        } finally {
+          // Reset button state
+          const submitBtn = lostFoundForm.querySelector('button[type="submit"]');
+          submitBtn.textContent = 'Submit Report';
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Function to load reports
+      async function loadReports() {
+        const reportsContainer = document.getElementById('reportsContainer');
+        reportsContainer.innerHTML = '<div class="loading-message">Loading reports...</div>';
+        
+        try {
+          const response = await fetch('/api/lostfound', {
+            headers: {
+              'x-auth-token': localStorage.getItem('petcare_token') || ''
+            }
+          });
+          
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.message || 'Failed to load reports');
+          }
+          
+          if (data.length === 0) {
+            reportsContainer.innerHTML = '<div class="no-reports">No reports found</div>';
+            return;
+          }
+          
+          // Clear container
+          reportsContainer.innerHTML = '';
+          
+          // Add reports to container
+          data.forEach(report => {
+            const reportCard = document.createElement('div');
+            reportCard.className = 'report-card';
+            
+            const reportTypeText = report.report_type === 'lost' ? 'Lost' : 'Found';
+            const reportTypeClass = report.report_type === 'lost' ? 'lost' : 'found';
+            
+            reportCard.innerHTML = `
+              ${report.photo_url ? `<img src="${report.photo_url}" alt="${reportTypeText} ${report.species}" class="report-image">` : ''}
+              <div class="report-details">
+                <span class="report-type ${reportTypeClass}">${reportTypeText}</span>
+                <h3 class="report-title">${reportTypeText} ${report.species} - ${report.breed || 'Unknown Breed'}</h3>
+                <p class="report-info"><i class="fas fa-map-marker-alt"></i> ${report.location}</p>
+                <p class="report-info"><i class="fas fa-calendar-alt"></i> ${new Date(report.report_date).toLocaleDateString()}</p>
+                ${report.color ? `<p class="report-info"><i class="fas fa-palette"></i> ${report.color}</p>` : ''}
+                ${report.gender !== 'unknown' ? `<p class="report-info"><i class="fas fa-venus-mars"></i> ${report.gender.charAt(0).toUpperCase() + report.gender.slice(1)}</p>` : ''}
+                ${report.description ? `<p class="report-info"><i class="fas fa-info-circle"></i> ${report.description}</p>` : ''}
+                <div class="report-contact">
+                  <a href="tel:${report.contact_phone}" class="report-contact-btn"><i class="fas fa-phone"></i> Contact</a>
+                </div>
+              </div>
+            `;
+            
+            reportsContainer.appendChild(reportCard);
+          });
+        } catch (error) {
+          console.error('Error loading reports:', error);
+          reportsContainer.innerHTML = `<div class="error-message">Error loading reports: ${error.message}</div>`;
+        }
+      }
+
+      // Load reports if view tab is active initially
+      if (document.getElementById('view-tab').classList.contains('active')) {
+        loadReports();
+      }
+    });
+  </script>
+</body>
+</html>

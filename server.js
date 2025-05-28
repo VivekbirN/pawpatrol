@@ -17,8 +17,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// API Routes (to be implemented)
-// app.use('/api/auth', require('./routes/auth'));
+// API Routes
+app.use('/api/auth', require('./routes/auth'));
+// Routes to be implemented
 // app.use('/api/animals', require('./routes/animals'));
 // app.use('/api/health', require('./routes/health'));
 // app.use('/api/feeding', require('./routes/feeding'));
