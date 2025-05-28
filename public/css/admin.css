@@ -1,0 +1,216 @@
+/* Admin Dashboard Specific Styles */
+
+/* Data Section Styles */
+.data-section {
+  background-color: var(--card-background);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h3 {
+  font-size: 1.2rem;
+  color: var(--secondary-text);
+  margin: 0;
+}
+
+.section-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-btn {
+  background-color: rgba(74, 111, 165, 0.1);
+  color: var(--admin-color);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn i {
+  margin-right: 5px;
+}
+
+.action-btn:hover {
+  background-color: var(--admin-color);
+  color: white;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  background-color: white;
+}
+
+/* Data Table Styles */
+.data-table-container {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+  background-color: rgba(74, 111, 165, 0.05);
+  color: var(--secondary-text);
+  font-weight: 600;
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(74, 111, 165, 0.03);
+}
+
+.data-table .empty-row td {
+  text-align: center;
+  color: #999;
+  padding: 30px 15px;
+}
+
+/* Status Badge Styles */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-open {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.status-resolved {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+.status-expired {
+  background-color: #fff2e8;
+  color: #fa8c16;
+}
+
+.status-pending {
+  background-color: #fff7e6;
+  color: #fa8c16;
+}
+
+.status-assigned {
+  background-color: #f9f0ff;
+  color: #722ed1;
+}
+
+.status-in_progress {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.status-completed {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+.status-cancelled {
+  background-color: #fff1f0;
+  color: #f5222d;
+}
+
+/* Urgency Badge Styles */
+.urgency-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.urgency-low {
+  background-color: #f6ffed;
+  color: #52c41a;
+}
+
+.urgency-medium {
+  background-color: #fff7e6;
+  color: #fa8c16;
+}
+
+.urgency-high {
+  background-color: #fff1f0;
+  color: #f5222d;
+}
+
+.urgency-emergency {
+  background-color: #f5222d;
+  color: white;
+}
+
+/* Action Button Styles */
+.view-btn,
+.edit-btn,
+.status-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-right: 5px;
+}
+
+.view-btn i,
+.edit-btn i,
+.status-btn i {
+  margin: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .section-actions {
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .filter-select {
+    flex: 1;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+}

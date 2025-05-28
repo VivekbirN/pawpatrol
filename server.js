@@ -18,14 +18,21 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api/auth', require('./routes/auth'));
+// Import routes
+const authRoutes = require('./routes/auth');
+const reportsRoutes = require('./routes/reports');
+const usersRoutes = require('./routes/users');
+
 // Routes to be implemented
 // app.use('/api/animals', require('./routes/animals'));
 // app.use('/api/health', require('./routes/health'));
 // app.use('/api/feeding', require('./routes/feeding'));
 // app.use('/api/adoption', require('./routes/adoption'));
-// app.use('/api/lostfound', require('./routes/lostfound'));
-// app.use('/api/rescue', require('./routes/rescue'));
+
+// Use routes
+app.use('/api/auth', authRoutes);
+app.use('/api', reportsRoutes);
+app.use('/api', usersRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

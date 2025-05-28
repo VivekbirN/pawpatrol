@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Rescue Requests - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/left-nav.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Rescue Admin specific styles */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+      --admin-color: #4a6fa5;
+      --emergency-color: #ff4d4d;
+      --urgent-color: #ff9800;
+      --normal-color: #4caf50;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background-color: var(--card-background);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .data-table th {
+      background-color: rgba(74, 111, 165, 0.1);
+      color: var(--admin-color);
+      font-weight: 600;
+      text-align: left;
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table td {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--secondary-text);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background-color: #fff7e6;
+      color: #fa8c16;
+    }
+
+    .status-inprogress {
+      background-color: #e6f7ff;
+      color: #0070f3;
+    }
+
+    .status-completed {
+      background-color: #f6ffed;
+      color: #52c41a;
+    }
+
+    .urgency-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .urgency-emergency {
+      background-color: #fff1f0;
+      color: var(--emergency-color);
+    }
+
+    .urgency-urgent {
+      background-color: #fff7e6;
+      color: var(--urgent-color);
+    }
+
+    .urgency-normal {
+      background-color: #f6ffed;
+      color: var(--normal-color);
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+      color: var(--admin-color);
+      transition: color 0.3s ease;
+    }
+
+    .action-btn:hover {
+      color: var(--accent-color);
+    }
+
+    .filter-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-select {
+      padding: 8px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      background-color: var(--card-background);
+      color: var(--secondary-text);
+    }
+
+    .search-input {
+      padding: 8px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      width: 250px;
+    }
+
+    .pet-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: var(--card-background);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--secondary-text);
+    }
+
+    .empty-state p {
+      color: #666;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .filter-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .search-input {
+        width: 100%;
+      }
+
+      .data-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Navigation Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="dashboard-container">
+    <!-- Left Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3>PawPatrol Admin</h3>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="admin_dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="admin_animals.html"><i class="fas fa-paw"></i> Animals</a></li>
+        <li><a href="admin_health.html"><i class="fas fa-heartbeat"></i> Health Records</a></li>
+        <li><a href="admin_feeding.html"><i class="fas fa-utensils"></i> Feeding</a></li>
+        <li><a href="admin_adoption.html"><i class="fas fa-home"></i> Adoption</a></li>
+        <li><a href="admin_lost_found.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+        <li><a href="admin_rescue.html" class="active"><i class="fas fa-ambulance"></i> Rescue</a></li>
+        <li><a href="admin_users.html"><i class="fas fa-users"></i> Users</a></li>
+        <li><a href="admin_settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+      </ul>
+      <div class="sidebar-auth">
+        <a href="#" id="logoutBtn" class="login-btn">Logout</a>
+      </div>
+    </div>
+
+    <main class="main-content">
+      <div class="dashboard-header">
+        <h2>Rescue Requests</h2>
+        <p>Manage and respond to rescue requests submitted by users.</p>
+      </div>
+
+      <div class="filter-controls">
+        <div class="filter-group">
+          <select id="statusFilter" class="filter-select">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="inprogress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+          <select id="urgencyFilter" class="filter-select">
+            <option value="all">All Urgency</option>
+            <option value="emergency">Emergency</option>
+            <option value="urgent">Urgent</option>
+            <option value="normal">Normal</option>
+          </select>
+        </div>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by location, species, or contact...">
+      </div>
+
+      <div id="rescueTableContainer">
+        <table class="data-table" id="rescueTable">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Animal</th>
+              <th>Location</th>
+              <th>Situation</th>
+              <th>Contact Info</th>
+              <th>Date</th>
+              <th>Urgency</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rescueTableBody">
+            <!-- Rescue requests will be loaded here dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <i class="fas fa-ambulance"></i>
+        <h3>No Rescue Requests Found</h3>
+        <p>There are no rescue requests matching your current filters. Try changing your search criteria or check back later.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile toggle functionality
+      const mobileToggle = document.getElementById('mobileToggle');
+      const sidebar = document.getElementById('sidebar');
+      
+      mobileToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+      });
+
+      // Filter elements
+      const statusFilter = document.getElementById('statusFilter');
+      const urgencyFilter = document.getElementById('urgencyFilter');
+      const searchInput = document.getElementById('searchInput');
+      const rescueTableBody = document.getElementById('rescueTableBody');
+      const emptyState = document.getElementById('emptyState');
+      const rescueTableContainer = document.getElementById('rescueTableContainer');
+
+      // Load rescue requests on page load
+      loadRescueRequests();
+
+      // Add event listeners for filters
+      statusFilter.addEventListener('change', applyFilters);
+      urgencyFilter.addEventListener('change', applyFilters);
+      searchInput.addEventListener('input', applyFilters);
+
+      // Function to load rescue requests
+      async function loadRescueRequests() {
+        try {
+          const token = localStorage.getItem('petcare_token');
+          
+          if (!token) {
+            window.location.href = 'new_auth.html';
+            return;
+          }
+          
+          const response = await fetch('/api/rescue', {
+            headers: {
+              'x-auth-token': token
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to load rescue requests');
+          }
+          
+          const requests = await response.json();
+          displayRescueRequests(requests);
+        } catch (error) {
+          console.error('Error loading rescue requests:', error);
+          alert('Failed to load rescue requests. Please try again.');
+        }
+      }
+
+      // Function to display rescue requests in the table
+      function displayRescueRequests(requests) {
+        if (requests.length === 0) {
+          rescueTableContainer.style.display = 'none';
+          emptyState.style.display = 'block';
+          return;
+        }
+        
+        rescueTableContainer.style.display = 'block';
+        emptyState.style.display = 'none';
+        
+        rescueTableBody.innerHTML = '';
+        
+        requests.forEach(request => {
+          const row = document.createElement('tr');
+          
+          // Format date
+          const requestDate = new Date(request.createdAt);
+          const formattedDate = requestDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+          
+          row.innerHTML = `
+            <td>
+              <img src="${request.photoUrl || 'https://via.placeholder.com/60x60?text=No+Image'}" alt="${request.species}" class="pet-image">
+            </td>
+            <td>
+              <strong style="text-transform: capitalize;">${request.species}</strong>
+              ${request.breed ? `<br><span>${request.breed}</span>` : ''}
+            </td>
+            <td>${request.location}</td>
+            <td>${request.situation.length > 50 ? request.situation.substring(0, 50) + '...' : request.situation}</td>
+            <td>
+              <strong>${request.contactName}</strong>
+              <br>${request.contactPhone}
+              ${request.contactEmail ? `<br>${request.contactEmail}` : ''}
+            </td>
+            <td>${formattedDate}</td>
+            <td>
+              <span class="urgency-badge urgency-${request.urgency}">${request.urgency}</span>
+            </td>
+            <td>
+              <span class="status-badge status-${request.status}">${request.status}</span>
+            </td>
+            <td>
+              <button class="action-btn" onclick="viewRequestDetails('${request._id}')" title="View Details">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn" onclick="updateRequestStatus('${request._id}', '${request.status}')" title="Update Status">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn" onclick="deleteRequest('${request._id}')" title="Delete Request">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          `;
+          
+          rescueTableBody.appendChild(row);
+        });
+      }
+
+      // Function to apply filters
+      function applyFilters() {
+        const statusValue = statusFilter.value;
+        const urgencyValue = urgencyFilter.value;
+        const searchValue = searchInput.value.toLowerCase();
+        
+        const rows = rescueTableBody.querySelectorAll('tr');
+        let visibleCount = 0;
+        
+        rows.forEach(row => {
+          const animalDetails = row.cells[1].textContent.trim().toLowerCase();
+          const location = row.cells[2].textContent.trim().toLowerCase();
+          const situation = row.cells[3].textContent.trim().toLowerCase();
+          const contactInfo = row.cells[4].textContent.trim().toLowerCase();
+          const urgency = row.cells[6].textContent.trim().toLowerCase();
+          const status = row.cells[7].textContent.trim().toLowerCase();
+          
+          const matchesStatus = statusValue === 'all' || status === statusValue;
+          const matchesUrgency = urgencyValue === 'all' || urgency === urgencyValue;
+          const matchesSearch = searchValue === '' || 
+                              animalDetails.includes(searchValue) || 
+                              location.includes(searchValue) || 
+                              situation.includes(searchValue) || 
+                              contactInfo.includes(searchValue);
+          
+          if (matchesStatus && matchesUrgency && matchesSearch) {
+            row.style.display = '';
+            visibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+        
+        if (visibleCount === 0) {
+          rescueTableContainer.style.display = 'none';
+          emptyState.style.display = 'block';
+        } else {
+          rescueTableContainer.style.display = 'block';
+          emptyState.style.display = 'none';
+        }
+      }
+
+      // Function to view request details
+      window.viewRequestDetails = function(requestId) {
+        // Implementation will be added later
+        alert(`View details for rescue request #${requestId}`);
+      }
+
+      // Function to update request status
+      window.updateRequestStatus = function(requestId, currentStatus) {
+        let newStatus;
+        
+        if (currentStatus === 'pending') {
+          newStatus = 'inprogress';
+        } else if (currentStatus === 'inprogress') {
+          newStatus = 'completed';
+        } else {
+          newStatus = 'pending';
+        }
+        
+        if (!confirm(`Are you sure you want to update this request status to ${newStatus}?`)) {
+          return;
+        }
+        
+        updateStatus(requestId, newStatus);
+      }
+
+      // Function to update status
+      async function updateStatus(requestId, newStatus) {
+        try {
+          const token = localStorage.getItem('petcare_token');
+          
+          const response = await fetch(`/api/rescue/${requestId}/status`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-auth-token': token
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+          
+          if (response.ok) {
+            alert(`Request status updated to ${newStatus}`);
+            // Reload requests to reflect the change
+            loadRescueRequests();
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message || 'Failed to update status'}`);
+          }
+        } catch (error) {
+          console.error('Error updating status:', error);
+          alert('An error occurred while updating the status. Please try again.');
+        }
+      }
+
+      // Function to delete request
+      window.deleteRequest = async function(requestId) {
+        if (!confirm('Are you sure you want to delete this rescue request? This action cannot be undone.')) {
+          return;
+        }
+        
+        try {
+          const token = localStorage.getItem('petcare_token');
+          
+          const response = await fetch(`/api/rescue/${requestId}`, {
+            method: 'DELETE',
+            headers: {
+              'x-auth-token': token
+            }
+          });
+          
+          if (response.ok) {
+            alert('Rescue request deleted successfully');
+            // Reload requests to reflect the change
+            loadRescueRequests();
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message || 'Failed to delete request'}`);
+          }
+        } catch (error) {
+          console.error('Error deleting request:', error);
+          alert('An error occurred while deleting the request. Please try again.');
+        }
+      }
+
+      // Logout functionality
+      const logoutBtn = document.getElementById('logoutBtn');
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('petcare_token');
+        localStorage.removeItem('petcare_current_user');
+        window.location.href = 'new_auth.html';
+      });
+    });
+  </script>
+</body>
+</html>

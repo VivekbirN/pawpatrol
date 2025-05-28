@@ -121,7 +121,7 @@ const app = () => {
 // Run the app when DOM content is loaded
 document.addEventListener('DOMContentLoaded', app);
 
-// Check if user is authenticated and update UI accordingly
+// Function to check authentication status and update UI accordingly
 function checkAuth() {
   const token = localStorage.getItem('petcare_token');
   const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
@@ -129,76 +129,92 @@ function checkAuth() {
   const loginBtn = document.getElementById('loginBtn');
   const registerBtn = document.getElementById('registerBtn');
   const logoutBtn = document.getElementById('logoutBtn');
+  const dashboardBtn = document.getElementById('dashboardBtn');
   
   if (token && currentUser) {
-    // User is authenticated
+    // User is logged in
     if (loginBtn) loginBtn.style.display = 'none';
     if (registerBtn) registerBtn.style.display = 'none';
     if (logoutBtn) logoutBtn.style.display = 'inline-block';
-    
-    // Check user role and show/hide elements accordingly
-    const role = currentUser.role;
-    
-    // Show/hide admin-only elements
-    const adminElements = document.querySelectorAll('.admin-only');
-    adminElements.forEach(el => {
-      el.style.display = role === 'admin' ? 'block' : 'none';
-    });
-    
-    // Show/hide vet-only elements
-    const vetElements = document.querySelectorAll('.vet-only');
-    vetElements.forEach(el => {
-      el.style.display = (role === 'vet' || role === 'admin') ? 'block' : 'none';
-    });
-    
-    // Show/hide user-only elements
-    const userElements = document.querySelectorAll('.user-only');
-    userElements.forEach(el => {
-      el.style.display = (role === 'public' || role === 'user') ? 'block' : 'none';
-    });
-    
-    // Add dashboard link to navigation if not already present
-    const navLinks = document.querySelector('.nav-links');
-    if (navLinks) {
-      let dashboardLink = document.querySelector('.dashboard-link');
+    if (dashboardBtn) {
+      dashboardBtn.style.display = 'inline-block';
       
-      if (!dashboardLink) {
-        dashboardLink = document.createElement('li');
-        dashboardLink.className = 'dashboard-link';
-        
-        const dashboardAnchor = document.createElement('a');
-        
-        // Set dashboard link based on user role
-        if (role === 'admin') {
-          dashboardAnchor.href = 'admin_dashboard.html';
-          dashboardAnchor.textContent = 'Admin Dashboard';
-        } else if (role === 'vet') {
-          dashboardAnchor.href = 'vet_dashboard.html';
-          dashboardAnchor.textContent = 'Vet Dashboard';
-        } else {
-          dashboardAnchor.href = 'user_dashboard.html';
-          dashboardAnchor.textContent = 'Dashboard';
+      // Set dashboard link based on user role
+      if (currentUser.role === 'admin') {
+        dashboardBtn.href = 'admin_dashboard.html';
+      } else if (currentUser.role === 'vet') {
+        dashboardBtn.href = 'vet_dashboard.html';
+      } else {
+        dashboardBtn.href = 'user_dashboard.html';
+      }
+    }
+    
+    // Show/hide elements based on user role
+    const adminOnlyElements = document.querySelectorAll('.admin-only');
+    const vetOnlyElements = document.querySelectorAll('.vet-only');
+    const userOnlyElements = document.querySelectorAll('.user-only');
+    
+    adminOnlyElements.forEach(el => {
+      el.style.display = currentUser.role === 'admin' ? 'block' : 'none';
+    });
+    
+    vetOnlyElements.forEach(el => {
+      el.style.display = currentUser.role === 'vet' ? 'block' : 'none';
+    });
+    
+    userOnlyElements.forEach(el => {
+      el.style.display = currentUser.role === 'public' ? 'block' : 'none';
+    });
+    
+    // Update navigation to include lost and found and rescue links
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+      // Check if lost and found link already exists
+      const lostFoundLink = Array.from(navLinks.querySelectorAll('a')).find(link => 
+        link.textContent.includes('Lost & Found'));
+      
+      // Check if rescue link already exists
+      const rescueLink = Array.from(navLinks.querySelectorAll('a')).find(link => 
+        link.textContent.includes('Rescue'));
+      
+      // Add lost and found link if it doesn't exist
+      if (!lostFoundLink) {
+        const lostFoundLi = document.createElement('li');
+        const lostFoundA = document.createElement('a');
+        lostFoundA.href = 'lost_found.html';
+        lostFoundA.textContent = 'Lost & Found';
+        // Check if current page is lost_found.html
+        if (window.location.pathname.includes('lost_found.html')) {
+          lostFoundA.classList.add('active');
         }
-        
-        dashboardLink.appendChild(dashboardAnchor);
-        navLinks.insertBefore(dashboardLink, navLinks.firstChild);
+        lostFoundLi.appendChild(lostFoundA);
+        navLinks.appendChild(lostFoundLi);
+      }
+      
+      // Add rescue link if it doesn't exist
+      if (!rescueLink) {
+        const rescueLi = document.createElement('li');
+        const rescueA = document.createElement('a');
+        rescueA.href = 'rescue.html';
+        rescueA.textContent = 'Rescue';
+        // Check if current page is rescue.html
+        if (window.location.pathname.includes('rescue.html')) {
+          rescueA.classList.add('active');
+        }
+        rescueLi.appendChild(rescueA);
+        navLinks.appendChild(rescueLi);
       }
     }
   } else {
-    // User is not authenticated
+    // User is not logged in
     if (loginBtn) loginBtn.style.display = 'inline-block';
     if (registerBtn) registerBtn.style.display = 'inline-block';
     if (logoutBtn) logoutBtn.style.display = 'none';
+    if (dashboardBtn) dashboardBtn.style.display = 'none';
     
     // Hide role-specific elements
     document.querySelectorAll('.admin-only, .vet-only, .user-only').forEach(el => {
       el.style.display = 'none';
     });
-    
-    // Remove dashboard link if present
-    const dashboardLink = document.querySelector('.dashboard-link');
-    if (dashboardLink) {
-      dashboardLink.remove();
-    }
   }
 }

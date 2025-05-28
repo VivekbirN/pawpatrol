@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found - PawPatrol</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/left-nav.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Lost & Found specific styles */
+    :root {
+      --background-color: #f8f9fa;
+      --card-background: #ffffff;
+      --accent-color: #e60023;
+      --secondary-text: #111111;
+      --border-color: #e2e2e2;
+      --pastel-1: #FCEADE;
+      --pastel-2: #FFD6D6;
+      --pastel-3: #C8E4B2;
+      --pastel-4: #9ED2C6;
+    }
+
+    .page-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 10px;
+    }
+
+    .page-header p {
+      color: #666;
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .tab-btn {
+      padding: 12px 30px;
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      color: var(--secondary-text);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+
+    .tab-btn:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+      border-color: var(--accent-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-container {
+      background-color: var(--card-background);
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--secondary-text);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .file-upload {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border: 2px dashed var(--border-color);
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .file-upload:hover {
+      border-color: var(--accent-color);
+    }
+
+    .file-upload i {
+      font-size: 2rem;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    .file-upload p {
+      margin: 0;
+      color: #666;
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      margin-top: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .submit-btn {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #d5001f;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Mobile Navigation Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Left Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>PawPatrol</h3>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="animals.html"><i class="fas fa-paw"></i> Animals</a></li>
+      <li><a href="health.html"><i class="fas fa-heartbeat"></i> Health</a></li>
+      <li><a href="feeding.html"><i class="fas fa-utensils"></i> Feeding</a></li>
+      <li><a href="lost_found.html" class="active"><i class="fas fa-search"></i> Lost & Found</a></li>
+      <li><a href="rescue.html"><i class="fas fa-ambulance"></i> Rescue</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+    <div class="sidebar-auth">
+      <a href="new_auth.html" id="loginBtn" class="login-btn">Login</a>
+      <a href="new_auth.html" id="registerBtn" class="register-btn">Register</a>
+      <a href="#" id="logoutBtn" class="login-btn" style="display: none;">Logout</a>
+      <a href="#" id="dashboardBtn" class="register-btn" style="display: none;">Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="page-container">
+      <div class="page-header">
+        <h1>Lost & Found Pets</h1>
+        <p>Have you lost your pet or found a stray animal? Use our platform to report lost pets or animals you've found to help reunite them with their owners.</p>
+      </div>
+
+      <!-- User Role Content -->
+      <div id="userRoleContent">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="lost">Report Lost Pet</button>
+          <button class="tab-btn" data-tab="found">Report Found Pet</button>
+        </div>
+
+        <div id="lostTab" class="tab-content active">
+          <div class="form-container">
+            <form id="lostPetForm">
+              <div class="form-group">
+                <label for="lostPetImage">Upload Image</label>
+                <div class="file-upload">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>Click to upload or drag and drop</p>
+                  <input type="file" id="lostPetImage" name="photo" accept="image/*" required>
+                </div>
+                <img id="lostPreviewImage" class="preview-image" alt="Preview">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="lostPetSpecies">Species</label>
+                  <select id="lostPetSpecies" name="species" required>
+                    <option value="">Select Species</option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="lostPetBreed">Breed (if known)</label>
+                  <input type="text" id="lostPetBreed" name="breed" placeholder="e.g., Labrador, Persian">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="lostPetColor">Color</label>
+                  <input type="text" id="lostPetColor" name="color" placeholder="e.g., Black, Brown & White">
+                </div>
+                <div class="form-group">
+                  <label for="lostPetGender">Gender</label>
+                  <select id="lostPetGender" name="gender">
+                    <option value="unknown">Unknown</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="lostPetLocation">Last Seen Location</label>
+                <input type="text" id="lostPetLocation" name="location" placeholder="Enter the location where your pet was last seen" required>
+              </div>
+
+              <div class="form-group">
+                <label for="lostPetDescription">Description</label>
+                <textarea id="lostPetDescription" name="description" placeholder="Provide any additional details about your pet, including distinctive features, collar color, etc."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="lostContactName">Your Name</label>
+                  <input type="text" id="lostContactName" name="contactName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                  <label for="lostContactPhone">Phone Number</label>
+                  <input type="tel" id="lostContactPhone" name="contactPhone" placeholder="Enter your phone number" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="lostContactEmail">Email Address</label>
+                <input type="email" id="lostContactEmail" name="contactEmail" placeholder="Enter your email address">
+              </div>
+
+              <button type="submit" class="submit-btn">Submit Report</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="foundTab" class="tab-content">
+          <div class="form-container">
+            <form id="foundPetForm">
+              <div class="form-group">
+                <label for="foundPetImage">Upload Image</label>
+                <div class="file-upload">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>Click to upload or drag and drop</p>
+                  <input type="file" id="foundPetImage" name="photo" accept="image/*" required>
+                </div>
+                <img id="foundPreviewImage" class="preview-image" alt="Preview">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="foundPetSpecies">Species</label>
+                  <select id="foundPetSpecies" name="species" required>
+                    <option value="">Select Species</option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="foundPetBreed">Breed (if known)</label>
+                  <input type="text" id="foundPetBreed" name="breed" placeholder="e.g., Labrador, Persian">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="foundPetColor">Color</label>
+                  <input type="text" id="foundPetColor" name="color" placeholder="e.g., Black, Brown & White">
+                </div>
+                <div class="form-group">
+                  <label for="foundPetGender">Gender</label>
+                  <select id="foundPetGender" name="gender">
+                    <option value="unknown">Unknown</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="foundPetLocation">Found Location</label>
+                <input type="text" id="foundPetLocation" name="location" placeholder="Enter the location where you found the pet" required>
+              </div>
+
+              <div class="form-group">
+                <label for="foundPetDescription">Description</label>
+                <textarea id="foundPetDescription" name="description" placeholder="Provide any additional details about the pet, including distinctive features, collar color, etc."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="foundContactName">Your Name</label>
+                  <input type="text" id="foundContactName" name="contactName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                  <label for="foundContactPhone">Phone Number</label>
+                  <input type="tel" id="foundContactPhone" name="contactPhone" placeholder="Enter your phone number" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="foundContactEmail">Email Address</label>
+                <input type="email" id="foundContactEmail" name="contactEmail" placeholder="Enter your email address">
+              </div>
+
+              <button type="submit" class="submit-btn">Submit Report</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Role Content -->
+      <div id="adminRoleContent" style="display: none;">
+        <div class="data-section">
+          <div class="section-header">
+            <h3>Lost & Found Reports</h3>
+            <div class="section-actions">
+              <button class="action-btn" id="refreshLostFoundBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+              <select id="lostFoundFilter" class="filter-select">
+                <option value="all">All Reports</option>
+                <option value="lost">Lost Pets</option>
+                <option value="found">Found Pets</option>
+                <option value="open">Open</option>
+                <option value="resolved">Resolved</option>
+                <option value="expired">Expired</option>
+              </select>
+            </div>
+          </div>
+          <div class="data-table-container">
+            <table class="data-table" id="lostFoundTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Species</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Contact</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="lostFoundTableBody">
+                <!-- Data will be loaded here dynamically -->
+                <tr class="empty-row">
+                  <td colspan="8">Loading lost and found reports...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Not Logged In Message -->
+      <div id="notLoggedInMessage" style="display: none;">
+        <div class="form-container">
+          <div style="text-align: center; padding: 30px;">
+            <i class="fas fa-lock" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 20px;"></i>
+            <h3>Please Log In to Continue</h3>
+            <p>You need to be logged in to submit or view lost and found reports.</p>
+            <a href="new_auth.html" class="submit-btn" style="display: inline-block; margin-top: 20px;">Log In / Register</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
+        const userRoleContent = document.getElementById('userRoleContent');
+        const adminRoleContent = document.getElementById('adminRoleContent');
+        const notLoggedInMessage = document.getElementById('notLoggedInMessage');
+        
+        if (!currentUser) {
+          // User is not logged in
+          userRoleContent.style.display = 'none';
+          adminRoleContent.style.display = 'none';
+          notLoggedInMessage.style.display = 'block';
+        } else if (currentUser.role === 'admin') {
+          // User is admin
+          userRoleContent.style.display = 'none';
+          adminRoleContent.style.display = 'block';
+          notLoggedInMessage.style.display = 'none';
+          
+          // Load lost and found reports for admin
+          loadLostFoundReports();
+        } else {
+          // Regular user
+          userRoleContent.style.display = 'block';
+          adminRoleContent.style.display = 'none';
+          notLoggedInMessage.style.display = 'none';
+        }
+
+        // Tab switching functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+    
+        tabBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to current button and content
+            this.classList.add('active');
+            document.getElementById(tabId + 'Tab').classList.add('active');
+          });
+        });
+    
+        // Image preview functionality for lost pet form
+        const lostPetImageInput = document.getElementById('lostPetImage');
+        const lostPreviewImage = document.getElementById('lostPreviewImage');
+    
+        if (lostPetImageInput) {
+          lostPetImageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                lostPreviewImage.src = e.target.result;
+                lostPreviewImage.style.display = 'block';
+              }
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+    
+        // Image preview functionality for found pet form
+        const foundPetImageInput = document.getElementById('foundPetImage');
+        const foundPreviewImage = document.getElementById('foundPreviewImage');
+    
+        if (foundPetImageInput) {
+          foundPetImageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                foundPreviewImage.src = e.target.result;
+                foundPreviewImage.style.display = 'block';
+              }
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+    
+        // Form submission for lost pet
+        const lostPetForm = document.getElementById('lostPetForm');
+        if (lostPetForm) {
+          lostPetForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Create FormData object
+            const formData = new FormData(this);
+            formData.append('report_type', 'lost');
+            formData.append('report_date', new Date().toISOString().split('T')[0]);
+            
+            try {
+              // Get current user if logged in
+              const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
+              if (currentUser && currentUser.id) {
+                formData.append('reported_by', currentUser.id);
+              }
+              
+              // Send data to server
+              const response = await fetch('/api/lost-found', {
+                method: 'POST',
+                body: formData
+              });
+              
+              if (response.ok) {
+                alert('Your lost pet report has been submitted successfully!');
+                lostPetForm.reset();
+                lostPreviewImage.style.display = 'none';
+              } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message || 'Failed to submit report'}`);
+              }
+            } catch (error) {
+              console.error('Error submitting form:', error);
+              alert('An error occurred while submitting your report. Please try again.');
+            }
+          });
+        }
+    
+        // Form submission for found pet
+        const foundPetForm = document.getElementById('foundPetForm');
+        if (foundPetForm) {
+          foundPetForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Create FormData object
+            const formData = new FormData(this);
+            formData.append('report_type', 'found');
+            formData.append('report_date', new Date().toISOString().split('T')[0]);
+            
+            try {
+              // Get current user if logged in
+              const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
+              if (currentUser && currentUser.id) {
+                formData.append('reported_by', currentUser.id);
+              }
+              
+              // Send data to server
+              const response = await fetch('/api/lost-found', {
+                method: 'POST',
+                body: formData
+              });
+              
+              if (response.ok) {
+                alert('Your found pet report has been submitted successfully!');
+                foundPetForm.reset();
+                foundPreviewImage.style.display = 'none';
+              } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message || 'Failed to submit report'}`);
+              }
+            } catch (error) {
+              console.error('Error submitting form:', error);
+              alert('An error occurred while submitting your report. Please try again.');
+            }
+          });
+        }
+    
+        // Admin functionality for lost and found reports
+        const refreshLostFoundBtn = document.getElementById('refreshLostFoundBtn');
+        const lostFoundFilter = document.getElementById('lostFoundFilter');
+    
+        if (refreshLostFoundBtn) {
+          refreshLostFoundBtn.addEventListener('click', function() {
+            loadLostFoundReports(lostFoundFilter.value);
+          });
+        }
+    
+        if (lostFoundFilter) {
+          lostFoundFilter.addEventListener('change', function() {
+            loadLostFoundReports(this.value);
+          });
+        }
+      });
+    
+      // Function to load lost and found reports for admin
+      async function loadLostFoundReports(filter = 'all') {
+        try {
+          const token = localStorage.getItem('petcare_token');
+          const response = await fetch(`/api/lost-found?filter=${filter}`, {
+            headers: {
+              'x-auth-token': token
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            const tableBody = document.getElementById('lostFoundTableBody');
+            
+            // Clear table
+            tableBody.innerHTML = '';
+            
+            if (data.length === 0) {
+              tableBody.innerHTML = '<tr class="empty-row"><td colspan="8">No lost and found reports found</td></tr>';
+              return;
+            }
+            
+            // Populate table
+            data.forEach(report => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${report.id}</td>
+                <td>${report.report_type === 'lost' ? 'Lost' : 'Found'}</td>
+                <td>${report.species}</td>
+                <td>${report.location}</td>
+                <td>${new Date(report.report_date).toLocaleDateString()}</td>
+                <td>${report.contact_name}<br>${report.contact_phone}</td>
+                <td>
+                  <span class="status-badge status-${report.status}">${report.status}</span>
+                </td>
+                <td>
+                  <button class="action-btn view-btn" data-id="${report.id}"><i class="fas fa-eye"></i></button>
+                  <button class="action-btn status-btn" data-id="${report.id}" data-status="${report.status}">
+                    ${report.status === 'open' ? '<i class="fas fa-check"></i>' : '<i class="fas fa-undo"></i>'}
+                  </button>
+                </td>
+              `;
+              tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('#lostFoundTableBody .view-btn').forEach(btn => {
+              btn.addEventListener('click', function() {
+                const reportId = this.getAttribute('data-id');
+                viewLostFoundReport(reportId);
+              });
+            });
+            
+            document.querySelectorAll('#lostFoundTableBody .status-btn').forEach(btn => {
+              btn.addEventListener('click', function() {
+                const reportId = this.getAttribute('data-id');
+                const currentStatus = this.getAttribute('data-status');
+                toggleLostFoundStatus(reportId, currentStatus);
+              });
+            });
+          } else {
+            console.error('Failed to load lost and found reports');
+          }
+        } catch (error) {
+          console.error('Error loading lost and found reports:', error);
+        }
+      }
+    
+      // Function to view lost and found report details
+      function viewLostFoundReport(reportId) {
+        // Implementation will be added later
+        alert(`View details for lost and found report #${reportId}`);
+      }
+    
+      // Function to toggle lost and found report status
+      async function toggleLostFoundStatus(reportId, currentStatus) {
+        try {
+          const newStatus = currentStatus === 'open' ? 'resolved' : 'open';
+          const token = localStorage.getItem('petcare_token');
+          
+          const response = await fetch(`/api/lost-found/${reportId}/status`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-auth-token': token
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+          
+          if (response.ok) {
+            alert(`Report status updated to ${newStatus}`);
+            // Reload reports to reflect the change
+            loadLostFoundReports(document.getElementById('lostFoundFilter').value);
+          } else {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message || 'Failed to update status'}`);
+          }
+        } catch (error) {
+          console.error('Error updating status:', error);
+          alert('An error occurred while updating the status. Please try again.');
+        }
+      }
+
+      // Mobile toggle and authentication functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.querySelector('.main-content');
+
+        mobileToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+          mainContent.classList.toggle('shifted');
+        });
+
+        // Check if user is logged in
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const dashboardBtn = document.getElementById('dashboardBtn');
+
+        if (isLoggedIn) {
+          loginBtn.style.display = 'none';
+          registerBtn.style.display = 'none';
+          logoutBtn.style.display = 'block';
+          dashboardBtn.style.display = 'block';
+        }
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('user');
+          window.location.href = 'index.html';
+        });
+
+        // Dashboard redirect
+        dashboardBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.location.href = 'dashboard.html';
+        });
+      });
+    </script>
+  </div> <!-- Close main-content -->
+</body>
+</html>

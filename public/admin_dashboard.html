@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - PawPatrol</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/left-nav.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -235,42 +237,32 @@
   </style>
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="nav-container">
-        <a href="index.html" class="logo">PawPatrol</a>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="admin_dashboard.html" class="active">Dashboard</a></li>
-          <li><a href="animals.html">Animals</a></li>
-          <li><a href="health.html">Health</a></li>
-          <li><a href="feeding.html">Feeding</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <div class="auth-buttons">
-          <a href="#" id="logoutBtn" class="login-btn">Logout</a>
-        </div>
-      </div>
-    </nav>
-  </header>
+  <!-- Mobile Navigation Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">
+    <i class="fas fa-bars"></i>
+  </button>
 
   <div class="dashboard-container">
-    <aside class="sidebar">
+    <!-- Left Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <h3>Admin Dashboard</h3>
+        <h3>PawPatrol Admin</h3>
       </div>
       <ul class="sidebar-menu">
         <li><a href="admin_dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="animals.html"><i class="fas fa-paw"></i> Animals</a></li>
-        <li><a href="health.html"><i class="fas fa-heartbeat"></i> Health Records</a></li>
-        <li><a href="feeding.html"><i class="fas fa-utensils"></i> Feeding Stations</a></li>
-        <li><a href="#"><i class="fas fa-home"></i> Adoption</a></li>
-        <li><a href="#"><i class="fas fa-search"></i> Lost & Found</a></li>
-        <li><a href="#"><i class="fas fa-ambulance"></i> Rescue</a></li>
-        <li><a href="#"><i class="fas fa-users"></i> Users</a></li>
-        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="admin_animals.html"><i class="fas fa-paw"></i> Animals</a></li>
+        <li><a href="admin_health.html"><i class="fas fa-heartbeat"></i> Health Records</a></li>
+        <li><a href="admin_feeding.html"><i class="fas fa-utensils"></i> Feeding</a></li>
+        <li><a href="admin_adoption.html"><i class="fas fa-home"></i> Adoption</a></li>
+        <li><a href="admin_lost_found.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+        <li><a href="admin_rescue.html"><i class="fas fa-ambulance"></i> Rescue</a></li>
+        <li><a href="admin_users.html"><i class="fas fa-users"></i> Users</a></li>
+        <li><a href="admin_settings.html"><i class="fas fa-cog"></i> Settings</a></li>
       </ul>
-    </aside>
+      <div class="sidebar-auth">
+        <a href="#" id="logoutBtn" class="login-btn">Logout</a>
+      </div>
+    </div>
 
     <main class="main-content">
       <div class="dashboard-header">
@@ -306,6 +298,20 @@
           </div>
           <h3>85</h3>
           <p>Volunteers</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3 id="lostFoundCount">0</h3>
+          <p>Lost & Found Reports</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-ambulance"></i>
+          </div>
+          <h3 id="rescueCount">0</h3>
+          <p>Rescue Requests</p>
         </div>
       </div>
 
@@ -352,6 +358,86 @@
           </div>
         </div>
       </div>
+
+      <!-- Lost & Found Reports Section -->
+      <div class="data-section">
+        <div class="section-header">
+          <h3>Lost & Found Reports</h3>
+          <div class="section-actions">
+            <button class="action-btn" id="refreshLostFoundBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <select id="lostFoundFilter" class="filter-select">
+              <option value="all">All Reports</option>
+              <option value="lost">Lost Pets</option>
+              <option value="found">Found Pets</option>
+              <option value="open">Open</option>
+              <option value="resolved">Resolved</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table" id="lostFoundTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Species</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="lostFoundTableBody">
+              <!-- Data will be loaded here dynamically -->
+              <tr class="empty-row">
+                <td colspan="8">Loading lost and found reports...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Rescue Requests Section -->
+      <div class="data-section">
+        <div class="section-header">
+          <h3>Rescue Requests</h3>
+          <div class="section-actions">
+            <button class="action-btn" id="refreshRescueBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <select id="rescueFilter" class="filter-select">
+              <option value="all">All Requests</option>
+              <option value="pending">Pending</option>
+              <option value="assigned">Assigned</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="data-table-container">
+          <table class="data-table" id="rescueTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Urgency</th>
+                <th>Requested By</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rescueTableBody">
+              <!-- Data will be loaded here dynamically -->
+              <tr class="empty-row">
+                <td colspan="8">Loading rescue requests...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -360,6 +446,11 @@
   <script src="js/main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Mobile navigation toggle
+      document.getElementById('mobileToggle').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('active');
+      });
+      
       // Check if user is logged in and has admin role
       const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
       
@@ -369,8 +460,229 @@
       } else {
         // Display admin name
         document.getElementById('adminName').textContent = currentUser.name;
+        
+        // Load lost and found reports
+        loadLostFoundReports();
+        
+        // Load rescue requests
+        loadRescueRequests();
       }
+      
+      // Event listeners for refresh buttons
+      document.getElementById('refreshLostFoundBtn').addEventListener('click', loadLostFoundReports);
+      document.getElementById('refreshRescueBtn').addEventListener('click', loadRescueRequests);
+      
+      // Event listeners for filters
+      document.getElementById('lostFoundFilter').addEventListener('change', function() {
+        loadLostFoundReports(this.value);
+      });
+      
+      document.getElementById('rescueFilter').addEventListener('change', function() {
+        loadRescueRequests(this.value);
+      });
+      
+      // Logout functionality
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('petcare_token');
+        localStorage.removeItem('petcare_current_user');
+        window.location.href = 'new_auth.html';
+      });
     });
+    
+    // Function to load lost and found reports
+    async function loadLostFoundReports(filter = 'all') {
+      try {
+        const response = await fetch(`/api/lost-found?filter=${filter}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('petcare_token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const tableBody = document.getElementById('lostFoundTableBody');
+          const countElement = document.getElementById('lostFoundCount');
+          
+          // Update count
+          countElement.textContent = data.length;
+          
+          // Clear table
+          tableBody.innerHTML = '';
+          
+          if (data.length === 0) {
+            tableBody.innerHTML = '<tr class="empty-row"><td colspan="8">No lost and found reports found</td></tr>';
+            return;
+          }
+          
+          // Populate table
+          data.forEach(report => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${report.id}</td>
+              <td>${report.report_type === 'lost' ? 'Lost' : 'Found'}</td>
+              <td>${report.species}</td>
+              <td>${report.location}</td>
+              <td>${new Date(report.report_date).toLocaleDateString()}</td>
+              <td>${report.contact_name}<br>${report.contact_phone}</td>
+              <td>
+                <span class="status-badge status-${report.status}">${report.status}</span>
+              </td>
+              <td>
+                <button class="action-btn view-btn" data-id="${report.id}"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit-btn" data-id="${report.id}"><i class="fas fa-edit"></i></button>
+                <button class="action-btn status-btn" data-id="${report.id}">
+                  ${report.status === 'open' ? '<i class="fas fa-check"></i>' : '<i class="fas fa-undo"></i>'}
+                </button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+          
+          // Add event listeners to buttons
+          document.querySelectorAll('#lostFoundTableBody .view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const reportId = this.getAttribute('data-id');
+              viewLostFoundReport(reportId);
+            });
+          });
+          
+          document.querySelectorAll('#lostFoundTableBody .edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const reportId = this.getAttribute('data-id');
+              editLostFoundReport(reportId);
+            });
+          });
+          
+          document.querySelectorAll('#lostFoundTableBody .status-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const reportId = this.getAttribute('data-id');
+              toggleLostFoundStatus(reportId);
+            });
+          });
+        } else {
+          console.error('Failed to load lost and found reports');
+        }
+      } catch (error) {
+        console.error('Error loading lost and found reports:', error);
+      }
+    }
+    
+    // Function to load rescue requests
+    async function loadRescueRequests(filter = 'all') {
+      try {
+        const response = await fetch(`/api/rescue?filter=${filter}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('petcare_token')}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const tableBody = document.getElementById('rescueTableBody');
+          const countElement = document.getElementById('rescueCount');
+          
+          // Update count
+          countElement.textContent = data.length;
+          
+          // Clear table
+          tableBody.innerHTML = '';
+          
+          if (data.length === 0) {
+            tableBody.innerHTML = '<tr class="empty-row"><td colspan="8">No rescue requests found</td></tr>';
+            return;
+          }
+          
+          // Populate table
+          data.forEach(request => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${request.id}</td>
+              <td>${request.location}</td>
+              <td>${request.description.substring(0, 50)}${request.description.length > 50 ? '...' : ''}</td>
+              <td>
+                <span class="urgency-badge urgency-${request.urgency}">${request.urgency}</span>
+              </td>
+              <td>${request.requested_by_name || 'Anonymous'}</td>
+              <td>${new Date(request.request_date).toLocaleDateString()}</td>
+              <td>
+                <span class="status-badge status-${request.status}">${request.status}</span>
+              </td>
+              <td>
+                <button class="action-btn view-btn" data-id="${request.id}"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit-btn" data-id="${request.id}"><i class="fas fa-edit"></i></button>
+                <button class="action-btn status-btn" data-id="${request.id}">
+                  ${request.status === 'pending' ? '<i class="fas fa-user-check"></i>' : '<i class="fas fa-undo"></i>'}
+                </button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+          
+          // Add event listeners to buttons
+          document.querySelectorAll('#rescueTableBody .view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const requestId = this.getAttribute('data-id');
+              viewRescueRequest(requestId);
+            });
+          });
+          
+          document.querySelectorAll('#rescueTableBody .edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const requestId = this.getAttribute('data-id');
+              editRescueRequest(requestId);
+            });
+          });
+          
+          document.querySelectorAll('#rescueTableBody .status-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const requestId = this.getAttribute('data-id');
+              updateRescueStatus(requestId);
+            });
+          });
+        } else {
+          console.error('Failed to load rescue requests');
+        }
+      } catch (error) {
+        console.error('Error loading rescue requests:', error);
+      }
+    }
+    
+    // Function to view lost and found report details
+    function viewLostFoundReport(reportId) {
+      // Implementation will be added later
+      alert(`View details for lost and found report #${reportId}`);
+    }
+    
+    // Function to edit lost and found report
+    function editLostFoundReport(reportId) {
+      // Implementation will be added later
+      alert(`Edit lost and found report #${reportId}`);
+    }
+    
+    // Function to toggle lost and found report status
+    async function toggleLostFoundStatus(reportId) {
+      // Implementation will be added later
+      alert(`Toggle status for lost and found report #${reportId}`);
+    }
+    
+    // Function to view rescue request details
+    function viewRescueRequest(requestId) {
+      // Implementation will be added later
+      alert(`View details for rescue request #${requestId}`);
+    }
+    
+    // Function to edit rescue request
+    function editRescueRequest(requestId) {
+      // Implementation will be added later
+      alert(`Edit rescue request #${requestId}`);
+    }
+    
+    // Function to update rescue request status
+    async function updateRescueStatus(requestId) {
+      // Implementation will be added later
+      alert(`Update status for rescue request #${requestId}`);
+    }
   </script>
 </body>
 </html>

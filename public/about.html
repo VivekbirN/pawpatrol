@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us - PawPatrol</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/left-nav.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -222,30 +223,39 @@
   </style>
 </head>
 <body>
+  <!-- Mobile Navigation Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Left Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>PawPatrol</h3>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="animals.html"><i class="fas fa-paw"></i> Animals</a></li>
+      <li><a href="health.html"><i class="fas fa-heartbeat"></i> Health</a></li>
+      <li><a href="feeding.html"><i class="fas fa-utensils"></i> Feeding</a></li>
+      <li><a href="lost_found.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+      <li><a href="rescue.html"><i class="fas fa-ambulance"></i> Rescue</a></li>
+      <li><a href="about.html" class="active"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+    <div class="sidebar-auth">
+      <a href="new_auth.html" id="loginBtn" class="login-btn">Login</a>
+      <a href="new_auth.html" id="registerBtn" class="register-btn">Register</a>
+      <a href="#" id="logoutBtn" class="login-btn" style="display: none;">Logout</a>
+      <a href="#" id="dashboardBtn" class="register-btn" style="display: none;">Dashboard</a>
+    </div>
+  </div>
+
   <!-- Background Image -->
   <div class="background-image"></div>
 
-  <!-- Navigation -->
-  <header>
-    <nav class="navbar">
-      <div class="nav-container">
-        <a href="index.html" class="logo">PawPatrol</a>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="animals.html">Animals</a></li>
-          <li><a href="adoption.html">Adoption</a></li>
-          <li><a href="feeding.html">Feeding</a></li>
-          <li><a href="lostfound.html">Lost & Found</a></li>
-          <li><a href="rescue.html">Rescue</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
-  </header>
-
-  <!-- About Content -->
-  <main>
+  <!-- Main Content -->
+  <div class="main-content">
     <div class="about-container">
       <div class="about-header">
         <h1>About PawPatrol</h1>
@@ -277,12 +287,54 @@
         </div>
       </div>
     </div>
-  </main>
+  </div> <!-- Close main-content -->
 
   <footer>
     <div class="nav-container">
       <p>&copy; 2023 PawPatrol. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- JavaScript for Mobile Toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileToggle = document.getElementById('mobileToggle');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.querySelector('.main-content');
+
+      mobileToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+        mainContent.classList.toggle('shifted');
+      });
+
+      // Check if user is logged in
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const loginBtn = document.getElementById('loginBtn');
+      const registerBtn = document.getElementById('registerBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const dashboardBtn = document.getElementById('dashboardBtn');
+
+      if (isLoggedIn) {
+        loginBtn.style.display = 'none';
+        registerBtn.style.display = 'none';
+        logoutBtn.style.display = 'block';
+        dashboardBtn.style.display = 'block';
+      }
+
+      // Logout functionality
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      });
+
+      // Dashboard redirect
+      dashboardBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'dashboard.html';
+      });
+    });
+  </script>
 </body>
 </html>

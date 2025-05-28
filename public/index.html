@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PawPatrol - Street Dogs and Cats Management System</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/left-nav.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -306,160 +307,226 @@
   
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="nav-container">
-        <a href="index.html" class="logo">PawPatrol</a>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="animals.html">Animals</a></li>
-          <li><a href="adoption.html">Adoption</a></li>
-          <li><a href="feeding.html">Feeding</a></li>
-          <li><a href="lostfound.html">Lost & Found</a></li>
-          <li><a href="rescue.html">Rescue</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-        <div class="auth-buttons">
-        <a href="new_auth.html" id="loginBtn" class="login-btn">Login</a>
-        <a href="new_auth.html?mode=register" id="registerBtn" class="register-btn">Register</a>
-        <a href="#" id="logoutBtn" class="login-btn" style="display: none;">Logout</a>
-      </div>
-      <div class="burger">
-        <div class="line1"></div>
-        <div class="line2"></div>
-        <div class="line3"></div>
-      </div>
-    </nav>
-  </header>
+  <!-- Mobile Navigation Toggle -->
+  <button class="mobile-toggle" id="mobileToggle">
+    <i class="fas fa-bars"></i>
+  </button>
 
-  <!-- Background Image Carousel -->
-  <div class="background-carousel">
-    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
-    <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+  <!-- Left Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>PawPatrol</h3>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="animals.html"><i class="fas fa-paw"></i> Animals</a></li>
+      <li><a href="health.html"><i class="fas fa-heartbeat"></i> Health</a></li>
+      <li><a href="feeding.html"><i class="fas fa-utensils"></i> Feeding</a></li>
+      <li><a href="lost_found.html"><i class="fas fa-search"></i> Lost & Found</a></li>
+      <li><a href="rescue.html"><i class="fas fa-ambulance"></i> Rescue</a></li>
+      <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+    <div class="sidebar-auth">
+      <a href="new_auth.html" id="loginBtn" class="login-btn">Login</a>
+      <a href="new_auth.html" id="registerBtn" class="register-btn">Register</a>
+      <a href="#" id="logoutBtn" class="login-btn" style="display: none;">Logout</a>
+      <a href="#" id="dashboardBtn" class="register-btn" style="display: none;">Dashboard</a>
+    </div>
   </div>
 
-  <main>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Background Carousel -->
+    <div class="background-carousel">
+      <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+      <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1312&q=80');"></div>
+      <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1543852786-1cf6624b9987?ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80');"></div>
+    </div>
+
+    <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h1>Help Street Animals Find a Better Life</h1>
-        <p>Join our community to track, care for, and manage stray dogs and cats in your area. Together we can make a difference!</p>
+        <h1>Welcome to PawPatrol</h1>
+        <p>Helping street animals live better lives through community care and management.</p>
         <div class="hero-buttons">
-          <a href="new_auth.html?mode=register" class="btn primary-btn"><i class="fas fa-paw"></i> Get Started</a>
-          <a href="#about" class="btn secondary-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+          <a href="animals.html" class="btn primary-btn">View Animals</a>
+          <a href="about.html" class="btn secondary-btn">Learn More</a>
         </div>
       </div>
     </section>
 
-    <section id="about" class="about-section">
-      <div class="container">
-        <h2>About Our Mission</h2>
-        <div class="about-content">
-          <div class="about-text">
-            <p>Our Street Dogs and Cats Management System helps NGOs, municipalities, and animal lovers to effectively track, care for, and manage stray animals. We provide tools for animal registration, health tracking, feeding schedules, adoption management, lost & found reporting, and rescue coordination.</p>
-            <p>Join us in making a difference in the lives of street animals!</p>
-            <div class="founder-image">
-              <img src="../viv.png" alt="Vivekbir Narula" style="max-width: 200px; border-radius: 10px; margin-top: 20px;">
-              <p><em>Vivekbir Narula, Founder</em></p>
-            </div>
-          </div>
-          <div class="about-stats">
-            <div class="stat-box">
-              <i class="fas fa-paw"></i>
-              <h3>Animals Helped</h3>
-              <p class="stat-number">500+</p>
-            </div>
-            <div class="stat-box">
-              <i class="fas fa-home"></i>
-              <h3>Adoptions</h3>
-              <p class="stat-number">200+</p>
-            </div>
-            <div class="stat-box">
-              <i class="fas fa-user-friends"></i>
-              <h3>Volunteers</h3>
-              <p class="stat-number">100+</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- Features Section -->
     <section class="features-section">
       <div class="container">
-        <h2>Our Features</h2>
+        <h2>How We Help</h2>
         <div class="features-grid">
           <div class="feature-card">
-            <i class="fas fa-clipboard-list"></i>
-            <h3>Animal Registration</h3>
-            <p>Register stray animals with photos, location, and health information</p>
+            <div class="feature-icon">
+              <i class="fas fa-paw"></i>
+            </div>
+            <h3>Animal Tracking</h3>
+            <p>We track and monitor street animals to ensure their well-being and health.</p>
           </div>
           <div class="feature-card">
-            <i class="fas fa-heartbeat"></i>
-            <h3>Health Tracking</h3>
-            <p>Monitor vaccinations and medical treatments</p>
+            <div class="feature-icon">
+              <i class="fas fa-medkit"></i>
+            </div>
+            <h3>Health Management</h3>
+            <p>Regular health check-ups and vaccinations for street animals.</p>
           </div>
           <div class="feature-card">
-            <i class="fas fa-utensils"></i>
-            <h3>Feeding Schedule</h3>
-            <p>Organize feeding points and volunteer schedules</p>
+            <div class="feature-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <h3>Feeding Stations</h3>
+            <p>Strategically placed feeding stations to ensure animals don't go hungry.</p>
           </div>
           <div class="feature-card">
-            <i class="fas fa-home"></i>
-            <h3>Adoption Portal</h3>
-            <p>Help animals find forever homes</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-search"></i>
-            <h3>Lost & Found</h3>
-            <p>Report and search for lost or found animals</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-ambulance"></i>
-            <h3>Rescue Requests</h3>
-            <p>Request help for animals in need</p>
+            <div class="feature-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <h3>Adoption Support</h3>
+            <p>Helping street animals find loving forever homes through our adoption program.</p>
           </div>
         </div>
       </div>
     </section>
-    
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>500+</h3>
+            <p>Animals Tracked</p>
+          </div>
+          <div class="stat-card">
+            <h3>50+</h3>
+            <p>Feeding Stations</p>
+          </div>
+          <div class="stat-card">
+            <h3>200+</h3>
+            <p>Successful Adoptions</p>
+          </div>
+          <div class="stat-card">
+            <h3>100+</h3>
+            <p>Volunteers</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Animals Section -->
+    <section class="recent-animals-section">
+      <div class="container">
+        <h2>Recently Added Animals</h2>
+        <div class="animals-grid">
+          <!-- Animal cards will be dynamically added here -->
+        </div>
+        <div class="view-all-container">
+          <a href="animals.html" class="btn primary-btn">View All Animals</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+      <div class="container">
+        <h2>What People Say</h2>
+        <div class="testimonials-slider">
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <p>"Thanks to PawPatrol, I was able to adopt my lovely dog Max. The process was smooth and the team was very helpful."</p>
+            </div>
+            <div class="testimonial-author">
+              <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sarah Johnson">
+              <div class="author-info">
+                <h4>Sarah Johnson</h4>
+                <p>Dog Owner</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <p>"I volunteer at one of the feeding stations, and it's amazing to see how PawPatrol has improved the lives of street animals in our area."</p>
+            </div>
+            <div class="testimonial-author">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Brown">
+              <div class="author-info">
+                <h4>Michael Brown</h4>
+                <p>Volunteer</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
     <section class="cta-section">
       <div class="container">
         <div class="cta-content">
           <h2>Ready to Make a Difference?</h2>
-          <p>Join our community today and help street animals in your area.</p>
-          <a href="new_auth.html?mode=register" class="btn primary-btn">Sign Up Now</a>
+          <p>Join our community of animal lovers and help us make a difference in the lives of street animals.</p>
+          <div class="cta-buttons">
+            <a href="volunteer.html" class="btn primary-btn">Become a Volunteer</a>
+            <a href="donate.html" class="btn secondary-btn">Donate Now</a>
+          </div>
         </div>
       </div>
     </section>
-  </main>
+  </div>
+</div>
 
-  <footer>
-    <div class="nav-container">
+<footer>
+  <div class="nav-container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h3>PawPatrol</h3>
+        <p>Helping street animals live better lives.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="animals.html">Animals</a></li>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="volunteer.html">Volunteer</a></li>
+          <li><a href="donate.html">Donate</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact Us</h4>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Street, City, Country</p>
+        <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+        <p><i class="fas fa-envelope"></i> info@pawpatrol.com</p>
+      </div>
+      <div class="footer-social">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
       <p>&copy; 2023 PawPatrol. All rights reserved.</p>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <script src="js/api.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/auth.js"></script>
-  <script>
-    // Check if user is already logged in and redirect to appropriate dashboard
-    document.addEventListener('DOMContentLoaded', function() {
-      const token = localStorage.getItem('petcare_token');
-      const currentUser = JSON.parse(localStorage.getItem('petcare_current_user'));
-      
-      if (token && currentUser) {
-        // Redirect based on user role
-        if (currentUser.role === 'admin') {
-          window.location.href = 'admin_dashboard.html';
-        } else if (currentUser.role === 'vet') {
-          window.location.href = 'vet_dashboard.html';
-        } else {
-          window.location.href = 'user_dashboard.html';
-        }
-      }
-    });
-  </script>
+<!-- JavaScript to toggle mobile navigation -->
+<script>
+  document.getElementById('mobileToggle').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('active');
+  });
+</script>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
